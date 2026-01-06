@@ -3,8 +3,8 @@ import { pgTable, uuid, text, timestamp, numeric } from "drizzle-orm/pg-core"
 export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
   fullName: text("full_name").notNull(),
-  phone: text("phone"),
-  role: text("role").notNull(),
+  phone: text("phone").notNull(),
+  role: text("role").notNull().default("user"),
   createdAt: timestamp("created_at").defaultNow()
 })
 

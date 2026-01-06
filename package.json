@@ -5,13 +5,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "type": "module",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrate:generate": "drizzle-kit generate",
+    "migrate:push": "drizzle-kit push",
+    "migrate:status": "drizzle-kit status"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
-    "drizzle-kit": "^0.26.0",
-    "drizzle-orm": "^0.26.0",
+    "drizzle-kit": "^0.31.8",
+    "drizzle-orm": "^0.45.1",
     "next": "16.1.1",
     "postgres": "^3.4.8",
     "react": "19.2.3",
