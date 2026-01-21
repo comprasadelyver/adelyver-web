@@ -8,11 +8,15 @@
     "type": "module",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
     "migrate:generate": "drizzle-kit generate",
     "migrate:push": "drizzle-kit push",
     "migrate:status": "drizzle-kit status"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.89.0",
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
@@ -26,9 +30,11 @@
     "@types/node": "^20.19.27",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/ui": "^3.0.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.0.3"
   }
 }

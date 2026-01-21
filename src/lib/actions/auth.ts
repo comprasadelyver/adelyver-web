@@ -1,23 +1,26 @@
-import { supabaseAdmin } from "@/lib/supabase/server"
+import { supabaseAdmin, supabase } from "@/lib/supabase/server"
 import { db } from "@/lib/db"
 import { profiles } from "@/lib/db/schema"
 import { randomUUID } from "crypto"
 
 interface RegisterInput {
-  
+  email?: string
   password: string
   fullName: string
-  phone: string
+  phone?: string
   role?: "user" | "admin"
 }
 
-export async function registerUser({ password, fullName, phone, role = "user" }: RegisterInput) {
+export async function registerUser({ email,password, fullName, phone, role = "user" }: RegisterInput) {
   
-  const { data: userData, error } = await supabaseAdmin.auth.admin.createUser({
-    
+  if (!email && !phone) {
+    throw new Error("Se requiere al menos email o phone");
+  }
+   const { data: userData, error } = await supabaseAdmin().auth.admin.createUser({
     password,
-    
-  })
+    email,
+    phone,
+  });
 
   if (error) throw new Error(error.message)
   if (!userData.user) throw new Error("No se pudo crear el usuario")
@@ -26,23 +29,34 @@ export async function registerUser({ password, fullName, phone, role = "user" }:
   await db.insert(profiles).values({
     id: randomUUID(),
     fullName,
-    phone: phone ,
+    phone: phone ?? null,
+    email: email ?? null,
     role
   })
 
-  return { id: userData.user.id, phone: userData.user.phone }
+  return { id: userData.user.id}
 }
 
 interface LoginInput {
-  phone: string
+  phone?: string
+  email?: string
   password: string
 }
 
-export async function loginUser({ phone, password }: LoginInput) {
-  const { data, error } = await supabaseAdmin.auth.signInWithPassword({
-    phone,
-    password
-  })
+export async function loginUser({ phone, email, password }: LoginInput) {
+   if (!email && !phone) {
+    throw new Error("Se requiere email o teléfono para iniciar sesión");
+  }
+  
+  let credentials: { email?: string; phone?: string; password: string };
+  
+  if (email) {
+    credentials = { email, password };
+  } else {
+    credentials = { phone: phone!, password };
+  }
+  
+  const { data, error } = await supabase().auth.signInWithPassword(credentials as any)
 
   if (error) throw new Error(error.message)
 
