@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterFormData } from "../__schemas/register.schema";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/app/__components/ui/input";
 import {
   Card,
   CardContent,
@@ -12,14 +12,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/app/__components/ui/card";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
+} from "@/app/__components/ui/field";
+import { Button } from "@/app/__components/ui/button";
 import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
 import { LoginData, loginSchema } from "../__schemas/login.schema";
 
