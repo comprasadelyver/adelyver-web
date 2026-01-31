@@ -1,4 +1,4 @@
-import { BugReportForm } from "../__components/DemoForm";
+
 import RegisterForm from "../__components/RegisterForm";
 
 export default function RegisterPage() {
