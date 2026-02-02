@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "lucide-react";
-import CircularProgress from "./CircularProgres";
+import CircularProgress from "./CircularProgress";
 import { ORDER_STATUSES, OrderStatus } from "@/features/models/OrderModel";
 import { ProductModel } from "@/features/models/ProductModel";
 import Link from "next/link";
