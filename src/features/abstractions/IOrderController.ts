@@ -1,6 +1,6 @@
 import { OrderModel, OrderStatus } from "../models/OrderModel";
 import { ProductModel } from "../models/ProductModel";
-import { Result } from "../shared/Result";
+
 import type { ApiResponse } from "@/lib/actions/response";
 
 export default interface IOrdersController {
