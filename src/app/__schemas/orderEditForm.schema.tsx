@@ -11,19 +11,19 @@ const statusOption = [
 export const orderEditFormSchema = z.object({
   status: z.enum(statusOption, "Selecciona un estado para el pedido"),
   packagePrice: z
-    .number("Debe ser un número")
-    .min(0, "El precio no puede ser negativo"),
+    .transform(Number)
+    .pipe(z.number("Debe ser un número").min(0, "No puede ser negativo")),
 
   shippingPrice: z
-    .number("Debe ser un número")
-    .min(0, "El envío no puede ser negativo"),
+    .transform(Number)
+    .pipe(z.number("Debe ser un número").min(0, "No puede ser negativo")),
 
   investedMoney: z
-    .number("Debe ser un número")
-    .min(0, "La inversión no puede ser negativa"),
+    .transform(Number)
+    .pipe(z.number("Debe ser un número").min(0, "No puede ser negativo")),
 
   amountPaidByClient: z
-    .number("Debe ser un número")
-    .min(0, "El pago no puede ser negativo"),
+    .transform(Number)
+    .pipe(z.number("Debe ser un número").min(0, "No puede ser negativo")),
 });
 export type OrderEditFormData = z.infer<typeof orderEditFormSchema>;

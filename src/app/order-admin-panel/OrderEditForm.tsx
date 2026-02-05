@@ -40,105 +40,133 @@ export default function OrderEditForm({
   });
   const onSubmit = (data: OrderEditFormData) => {
     console.log("Datos válidos:", data);
+    form.reset(data);
   };
 
   return (
     <div className="">
       <form id="order-edit-form" onSubmit={form.handleSubmit(onSubmit)}>
-        <Controller
-          control={form.control}
-          name="status"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Estado del pedido</FieldLabel>
-              <AdminSelectStatus
-                value={field.value}
-                onValueChange={(val) => {
-                  field.onChange(val);
-                  onStatusChange(val);
-                }}
-              ></AdminSelectStatus>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="packagePrice"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Precio del paquete (USD)</FieldLabel>
-              <Input
-                {...field}
-                id="order-form-package-price"
-                aria-invalid={fieldState.invalid}
-                placeholder="0.00"
+        <FieldGroup>
+          <Controller
+            control={form.control}
+            name="status"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>Estado del pedido</FieldLabel>
+                <AdminSelectStatus
+                  value={field.value}
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                    onStatusChange(val);
+                  }}
+                ></AdminSelectStatus>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="packagePrice"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>Precio del paquete (USD)</FieldLabel>
+                <Input
+                  {...field}
+                  id="order-form-package-price"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="0.00"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="shippingPrice"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>Precio del envío (USD)</FieldLabel>
+                <Input
+                  {...field}
+                  id="order-form-shipping-price"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="0.00"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="investedMoney"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>Dinero invertido (USD)</FieldLabel>
+                <Input
+                  {...field}
+                  id="order-form-invested-money"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="0.00"
+                  type="number"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="amountPaidByClient"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel>Dinero pagado por el cliente (USD)</FieldLabel>
+                <Input
+                  {...field}
+                  id="order-form-aPBC"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="0.00"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+          <div
+            className={cn(
+              "flex justify-end gap-x-2",
+              !form.formState.isDirty && "hidden"
+            )}
+          >
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Spinner
+                data-icon="inline-start"
+                className={cn(!form.formState.isSubmitting && "hidden")}
               />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="shippingPrice"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Precio del envío (USD)</FieldLabel>
-              <Input
-                {...field}
-                id="order-form-shipping-price"
-                aria-invalid={fieldState.invalid}
-                placeholder="0.00"
+              Aplicar
+            </Button>
+            <Button
+              type="reset"
+              variant="secondary"
+              onClick={() => form.reset()}
+              disabled={form.formState.isSubmitting}
+            >
+              <Spinner
+                data-icon="inline-start"
+                className={cn(!form.formState.isSubmitting && "hidden")}
               />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="investedMoney"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Dinero invertido (USD)</FieldLabel>
-              <Input
-                {...field}
-                id="order-form-invested-money"
-                aria-invalid={fieldState.invalid}
-                placeholder="0.00"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="amountPaidByClient"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Dinero pagado por el cliente (USD)</FieldLabel>
-              <Input
-                {...field}
-                id="order-form-aPBC"
-                aria-invalid={fieldState.invalid}
-                placeholder="0.00"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
+              Deshacer
+            </Button>
+          </div>
+        </FieldGroup>
       </form>
-      <Button
-        type="submit"
-        form="order-edit-form"
-        disabled={form.formState.isSubmitting}
-        className="mt-30"
-      >
-        <Spinner
-          data-icon="inline-start"
-          className={cn(!form.formState.isSubmitting && "hidden")}
-        />
-        Añadir Producto
-      </Button>
     </div>
   );
 }
