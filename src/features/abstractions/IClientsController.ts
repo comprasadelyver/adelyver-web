@@ -14,7 +14,7 @@ export default interface IClientsController {
 
 export type ClientDto = {
   fullName: string;
-  phone: string;
+  phone?: string;
   email?: string;
   createdAt: Date;
 };

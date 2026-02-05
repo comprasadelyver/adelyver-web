@@ -38,8 +38,8 @@ export type findOrdersRequest = {
   clientName?: string;
   createdAfter?: Date;
   createdBefore?: Date;
-  ignoreCancelled: boolean;
-  ignoreDelievered: boolean;
+  ignoreCancelled?: boolean;
+  ignoreDelievered?: boolean;
 };
 
 export type CreateOrderByClientRequest = {
@@ -58,7 +58,7 @@ export type UpdateOrderByAdminRequest = {
   status?: OrderStatus;
   packagePrice?: number;
   deliveryPrice?: number;
-  spentMoney: number;
+  spentMoney?: number;
   paidByClient: number;
 };
 

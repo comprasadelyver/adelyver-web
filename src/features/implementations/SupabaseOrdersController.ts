@@ -7,10 +7,10 @@ import IOrdersController, {
   CreateProductRequest,
   UpdateProductRequest,
 } from "../abstractions/IOrderController";
-import { supabase, supabaseAdmin } from "@/lib/supabase/server";
+import {  supabaseAdmin } from "../../lib/supabase/server";
 
 import { randomUUID } from "crypto";
-import { successResponse, errorResponse, handleActionError, type ApiResponse } from "@/lib/actions/response";
+import { successResponse, errorResponse, handleActionError, type ApiResponse } from "../../lib/actions/response";
 
 export const SupabaseOrdersController: IOrdersController = {
   getClientOrderById: async (orderId: string): Promise<ApiResponse<ClientOrderDto>> => {
@@ -90,7 +90,8 @@ export const SupabaseOrdersController: IOrdersController = {
   findOrders: async (req: findOrdersRequest): Promise<ApiResponse<any[]>> => {
     try {
     
-      let query = supabase().from("orders").select("*");
+      let query = supabaseAdmin().from("orders").select("*");
+      
 
       if (req.clientName) {
         

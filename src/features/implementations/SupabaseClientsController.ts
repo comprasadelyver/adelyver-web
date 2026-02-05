@@ -1,6 +1,6 @@
 import IClientsController, { CreateClientRequest, FindClientsRequest, ClientDto } from "../abstractions/IClientsController";
-import {  supabaseAdmin } from "@/lib/supabase/server";
-import { successResponse, errorResponse, handleActionError, type ApiResponse } from "@/lib/actions/response";
+import {  supabaseAdmin } from "../../lib/supabase/server";
+import { successResponse, errorResponse, handleActionError, type ApiResponse } from "../../lib/actions/response";
 
 export const SupabaseClientsController: IClientsController = {
   findClients: async (req: FindClientsRequest): Promise<ApiResponse<ClientDto[]>> => {
@@ -32,6 +32,7 @@ export const SupabaseClientsController: IClientsController = {
   createClient: async (req: CreateClientRequest): Promise<ApiResponse> => {
     try {
       const { data: userData, error } = await supabaseAdmin().auth.admin.createUser({
+        
         email: req.email ?? undefined,
         phone: req.phone ?? undefined,
         password: req.password,
