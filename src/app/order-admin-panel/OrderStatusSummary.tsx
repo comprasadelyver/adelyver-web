@@ -9,6 +9,7 @@ import {
 import CircularProgress from "../__components/CircularProgress";
 import OrderEditForm from "./OrderEditForm";
 import { useState } from "react";
+import { Separator } from "../__components/ui/separator";
 
 type OrderStatusSummaryProps = {
   orderStatus: OrderStatus;
@@ -62,7 +63,7 @@ export default function OrderStatusSummary({
               </div>
             </AccordionTrigger>
             <div className="col-span-2">
-              <AccordionContent className="pt-2 pb-6 border-t border-dashed border-gray-800 mt-2">
+              <AccordionContent>
                 <OrderEditForm
                   currentStatus={currentStatus}
                   onStatusChange={setCurrentStatus}
@@ -71,6 +72,7 @@ export default function OrderStatusSummary({
             </div>
           </div>
         </AccordionItem>
+        <Separator />
       </Accordion>
     </>
   );

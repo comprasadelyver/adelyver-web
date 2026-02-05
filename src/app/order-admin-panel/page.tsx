@@ -1,10 +1,10 @@
-
-import OrderStatusView from "../__components/OrderStatusView";
+import AdminOrderEdit from "./AdminOrderEdit";
 
 export default function OrderAdminPanelPage() {
   return (
-    <main className="grid px-4 min-h-dvh place-items-center">
-        <OrderStatusView  mode="accordion"showAddBooton={false} isAdmin={true}/>
+    <main className="grid px-4 min-h-dvh justify-center py-20 ">
+      <AdminOrderEdit></AdminOrderEdit>
     </main>
   );
 }
+ 

@@ -1,7 +1,9 @@
-import OrderStatusView from "../__components/OrderStatusView";
+import OrderStatusView from "./OrderStatusView";
 
-export default function OrderStatusViewPage (){
-    return <main className="grid px-4 min-h-dvh place-items-center">
-        <OrderStatusView />
-      </main>;
+export default function OrderStatusViewPage() {
+  return (
+    <main className="grid px-4 min-h-dvh justify-center py-20">
+      <OrderStatusView />
+    </main>
+  );
 }
