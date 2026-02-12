@@ -1,8 +1,7 @@
 import IClientsController from "./abstractions/IClientsController";
 import IOrdersController from "./abstractions/IOrderController";
-
-import { SupabaseClientsController } from "./implementations/SupabaseClientsController";
-import { SupabaseOrdersController } from "./implementations/SupabaseOrdersController";
+import { MockClientsController } from "./implementations/MockClientsController";
+import { MockOrdersController } from "./implementations/MockOrdersController";
 
 export type IocRegistry = {
   OrdersController: IOrdersController;
@@ -10,7 +9,6 @@ export type IocRegistry = {
 };
 
 export const ioc: IocRegistry = {
-  
-  OrdersController: SupabaseOrdersController,
-  ClientsController: SupabaseClientsController,
+  OrdersController: MockOrdersController,
+  ClientsController: MockClientsController,
 } as const;

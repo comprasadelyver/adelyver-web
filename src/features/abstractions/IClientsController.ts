@@ -1,20 +1,20 @@
 import { Result } from "../shared/Result";
-import type { ApiResponse } from "@/lib/actions/response";
 
 export default interface IClientsController {
-  findClients: (req: FindClientsRequest) => Promise<ApiResponse<ClientDto[]>>;
+  findClients: (req: FindClientsRequest) => Promise<Result<ClientDto[]>>;
 
-  createClient: (req: CreateClientRequest) => Promise<ApiResponse>;
+  createClient: (req: CreateClientRequest) => Promise<Result<void>>;
 
-  deleteCient: (phone: string) => Promise<ApiResponse<void>>;
+  deleteCient: (phone: string) => Promise<Result<void>>;
 
-  loginByPhone: (phone: string, password: string) => Promise<ApiResponse>;
-  loginByEmail: (email: string, password: string) => Promise<ApiResponse>;
+  loginByPhone: (phone: string, password: string) => Promise<Result<void>>;
+
+  loginByEmail: (email: string, password: string) => Promise<Result<void>>;
 }
 
 export type ClientDto = {
   fullName: string;
-  phone?: string;
+  phone: string;
   email?: string;
   createdAt: Date;
 };
@@ -24,8 +24,6 @@ export type FindClientsRequest = {
   phone?: string;
 };
 
-export type CreateClientRequest = Omit<ClientDto, "phone" | "email" | "createdAt"> & {
+export type CreateClientRequest = ClientDto & {
   password: string;
-  phone?: string;
-  email?: string;
 };

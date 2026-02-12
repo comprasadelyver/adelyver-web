@@ -1,32 +1,31 @@
 import { OrderModel, OrderStatus } from "../models/OrderModel";
 import { ProductModel } from "../models/ProductModel";
-
-import type { ApiResponse } from "@/lib/actions/response";
+import { Result } from "../shared/Result";
 
 export default interface IOrdersController {
-  getClientOrderById: (orderId: string) => Promise<ApiResponse<ClientOrderDto>>;
+  getClientOrderById: (orderId: string) => Promise<Result<ClientOrderDto>>;
 
-  getClientAllOrders: () => Promise<ApiResponse<ClientOrderDto[]>>;
+  getClientAllOrders: () => Promise<Result<ClientOrderDto[]>>;
 
-  getClientOrderProducts: (orderId: string) => Promise<ApiResponse<ProductModel[]>>;
+  getClientOrderProducts: (orderId: string) => Promise<Result<ProductModel[]>>;
 
-  findOrders: (req: findOrdersRequest) => Promise<ApiResponse<OrderModel[]>>;
+  findOrders: (req: findOrdersRequest) => Promise<Result<OrderModel[]>>;
 
   createOrderByClient: (
     req: CreateOrderByClientRequest
-  ) => Promise<ApiResponse>;
+  ) => Promise<Result<void>>;
 
   createOrderByAdmin: (
     req: CreateOrderByAdminRequest
-  ) => Promise<ApiResponse<{ id: string }>>;
+  ) => Promise<Result<{ id: string }>>;
 
-  updateOrderByAdmin: (req: UpdateOrderByAdminRequest) => Promise<ApiResponse>;
+  updateOrderByAdmin: (req: UpdateOrderByAdminRequest) => Promise<Result<void>>;
 
-  createProductByAdmin: (req: CreateProductRequest) => Promise<ApiResponse>;
+  createProductByAdmin: (req: CreateProductRequest) => Promise<Result<void>>;
 
-  updateProductByAdmin: (req: UpdateProductRequest) => Promise<ApiResponse>;
+  updateProductByAdmin: (req: UpdateProductRequest) => Promise<Result<void>>;
 
-  deleteProductByAdmin: (id: string) => Promise<ApiResponse<void>>;
+  deleteProductByAdmin: (id: string) => Promise<Result<void>>;
 }
 
 export type ClientOrderDto = Omit<OrderModel, "shopCartUrl" | "spentMoney">;
@@ -38,8 +37,8 @@ export type findOrdersRequest = {
   clientName?: string;
   createdAfter?: Date;
   createdBefore?: Date;
-  ignoreCancelled?: boolean;
-  ignoreDelievered?: boolean;
+  ignoreCancelled: boolean;
+  ignoreDelievered: boolean;
 };
 
 export type CreateOrderByClientRequest = {
@@ -58,7 +57,7 @@ export type UpdateOrderByAdminRequest = {
   status?: OrderStatus;
   packagePrice?: number;
   deliveryPrice?: number;
-  spentMoney?: number;
+  spentMoney: number;
   paidByClient: number;
 };
 
