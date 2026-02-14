@@ -1,6 +1,6 @@
 import IOrdersController, {
   ClientOrderDto,
-  findOrdersRequest,
+  FindOrdersRequest,
   CreateOrderByClientRequest,
   CreateOrderByAdminRequest,
   UpdateOrderByAdminRequest,
@@ -90,7 +90,7 @@ export const SupabaseOrdersController: IOrdersController = {
     }
   },
 
-  findOrders: async (req: findOrdersRequest): Promise<Result<OrderModel[]>> => {
+  findOrders: async (req: FindOrdersRequest): Promise<Result<OrderModel[]>> => {
     try {
     
       let query = supabaseAdmin().from("orders").select("*");

@@ -24,7 +24,8 @@ import { LoginData, loginSchema } from "../__schemas/login.schema";
 import { OrderFormData, orderFormSchema } from "../__schemas/orderForm.schema";
 import { Spinner } from "../__components/ui/spinner";
 import { cn } from "../__lib/utils";
-import { createOrder } from "@/lib/actions/orders";
+import { createOrderByClientAction } from "@/features/actions/OrdersController.actions";
+import { toast } from "sonner";
 
 export default function OrderForm() {
   const router = useRouter();
@@ -35,13 +36,33 @@ export default function OrderForm() {
     },
   });
 
+  const { isSubmitting } = form.formState;
+  const onSubmit = async (data: OrderFormData) => {
+    try {
+      const res = await createOrderByClientAction({
+        shopCartUrl: data.website,
+      });
+
+      if (!res.ok) {
+        toast.error(res.error.message || "Error al crear el pedido");
+        return;
+      }
+
+      toast.success("Pedido enviado correctamente");
+      form.reset();
+      router.refresh();
+    } catch (error) {
+      toast.error("Ocurrió un fallo en la conexión");
+    }
+  };
+
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle>Inserte link del carrito</CardTitle>
       </CardHeader>
       <CardContent>
-        <form id="order-form" onSubmit={form.handleSubmit(()=>{})}></form>
+        <form id="order-form" onSubmit={form.handleSubmit(onSubmit)}></form>
         <FieldGroup>
           <Controller
             control={form.control}
@@ -63,11 +84,7 @@ export default function OrderForm() {
         </FieldGroup>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button
-          type="submit"
-          form="order-form"
-          disabled={form.formState.isSubmitting}
-        >
+        <Button type="submit" form="order-form" disabled={isSubmitting}>
           <Spinner
             data-icon="inline-start"
             className={cn(!form.formState.isSubmitting && "hidden")}

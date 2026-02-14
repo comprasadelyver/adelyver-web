@@ -30,18 +30,22 @@ export default function ProductAdminEdit({
   products,
   form,
   createdBy,
+  
 }: ProductAdminEditProps) {
   const groupedProducts = useMemo(() => {
     return Object.groupBy(products, (product) => product.trackingNumber);
   }, [products]);
-  const handleEditClick = (product: any) => {
+  const handleEditClick = async (product: any) => {
     form.reset({
       name: product.name,
       productId: String(product.productId),
       productLink: product.productLink,
       trackingNumber: String(product.trackingNumber),
     });
+    
   };
+
+
   return (
     <>
       {Object.entries(groupedProducts).map(([trackingNumber, items]) => (

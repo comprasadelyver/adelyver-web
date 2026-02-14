@@ -39,7 +39,6 @@ export default function OrderEditForm({
     },
   });
   const onSubmit = (data: OrderEditFormData) => {
-    console.log("Datos válidos:", data);
     form.reset(data);
   };
 

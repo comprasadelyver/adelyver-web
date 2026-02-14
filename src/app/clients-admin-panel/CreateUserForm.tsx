@@ -16,10 +16,10 @@ import { createClientAction } from "@/features/actions/ClientsController.actions
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-interface CreateUserFormProps {
+type CreateUserFormProps = {
   onSuccess?: () => void;
-  onLoading: (loading: boolean) => void;
-}
+  onLoading?: (loading: boolean) => void;
+};
 
 export default function CreateUserForm({
   onSuccess,

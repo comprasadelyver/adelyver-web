@@ -1,4 +1,8 @@
-import { OrderStatus, OrderStatusValues } from "@/features/models/OrderModel";
+import {
+  getClientStats,
+  OrderStatus,
+  OrderStatusValues,
+} from "@/features/models/OrderModel";
 import { Field, FieldLabel } from "../__components/ui/field";
 import { Input } from "../__components/ui/input";
 import { Button } from "../__components/ui/button";
@@ -12,16 +16,39 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../__components/ui/drawer";
+import useFindOrdersQuery from "@/queries/useFindOrdersQuery";
+import { Spinner } from "../__components/ui/spinner";
 
 type ClientOrderStatsProps = {
   initialName: string;
-  stats: Record<OrderStatus, number>;
+  clientNumber: string;
 };
 
 export default function ClientOrderStats({
   initialName,
-  stats,
+  clientNumber,
 }: ClientOrderStatsProps) {
+  const ordersQuery = useFindOrdersQuery({
+    ignoreCancelled: false,
+    ignoreDelievered: false,
+    clientNumber,
+  });
+
+  if (ordersQuery.isError) {
+    return <p>Ha ocurrido un error de tipo: {ordersQuery.error.message}</p>;
+  }
+
+  if (ordersQuery.isLoading || !ordersQuery.data) {
+    return (
+      <span className="flex gap-4 items-center">
+        <Spinner />
+        <span>Cargando estadísticas...</span>
+      </span>
+    );
+  }
+
+  const stats = getClientStats(ordersQuery.data);
+
   return (
     <div>
       <Field>
@@ -40,7 +67,7 @@ export default function ClientOrderStats({
         ))}
       </div>
       <Button variant={"default"} className="w-[100%] mt-6">
-        Ver Pedido
+        Ver Pedidos
       </Button>
       <Drawer>
         <DrawerTrigger asChild>
@@ -57,9 +84,7 @@ export default function ClientOrderStats({
             </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
-            <Button variant={"destructive"}>
-              Eliminar
-            </Button>
+            <Button variant={"destructive"}>Eliminar</Button>
             <DrawerClose asChild>
               <Button variant="secondary">Atrás</Button>
             </DrawerClose>

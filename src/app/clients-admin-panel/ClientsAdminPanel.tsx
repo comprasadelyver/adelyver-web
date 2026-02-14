@@ -16,83 +16,49 @@ import {
 import CreateUserForm from "./CreateUserForm";
 import { useState } from "react";
 import { Spinner } from "../__components/ui/spinner";
-import { cn } from "../__lib/utils";
-
-type ClientMock = {
-  name: string;
-  phone: number;
-  createdAt: string;
-  gmail: string;
-  orders: { status: OrderStatus }[];
-};
-
-const clients: ClientMock[] = [
-  {
-    name: "Carlos",
-    phone: 89874523,
-    createdAt: "2026-02-11T10:00:00Z",
-    gmail: "carlos@gmail.com",
-    orders: [
-      { status: "confirmed" },
-      { status: "confirmed" },
-      { status: "delivered" },
-      { status: "pending_review" },
-    ],
-  },
-  {
-    name: "Pepe",
-    phone: 53654789,
-    createdAt: "2026-02-11T10:00:00Z",
-    gmail: "pepe@gmail.com",
-    orders: [
-      { status: "confirmed" },
-      { status: "confirmed" },
-      { status: "delivered" },
-      { status: "pending_review" },
-      { status: "confirmed" },
-      { status: "confirmed" },
-      { status: "delivered" },
-      { status: "pending_review" },
-    ],
-  },
-  {
-    name: "Manolo",
-    phone: 56963254,
-    createdAt: "2026-02-11T10:00:00Z",
-    gmail: "pepe@gmail.com",
-    orders: [
-      { status: "confirmed" },
-      { status: "confirmed" },
-      { status: "delivered" },
-      { status: "pending_review" },
-      { status: "confirmed" },
-      { status: "confirmed" },
-      { status: "delivered" },
-      { status: "pending_review" },
-    ],
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import useGetClients from "@/queries/useGetClientsQuery";
+import { useSearchParams } from "next/navigation";
 
 export default function ClientsAdminPanel() {
+  const searchParams = useSearchParams();
+  const clientsQuery = useGetClients({
+    name: searchParams.get("name") ?? "",
+    phone: searchParams.get("phone") ?? "",
+  });
+
   const [isOpen, setIsOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  if (clientsQuery.isError) {
+    return <p>Ha ocurrido un error de tipo: {clientsQuery.error.message}</p>;
+  }
+  if (clientsQuery.isLoading || !clientsQuery.data) {
+    return (
+      <span className="flex gap-4 items-center">
+        <Spinner />
+        <span>Cargando clientes...</span>
+      </span>
+    );
+  }
   return (
     <>
       <div className="px-6 w-full max-w-2xl">
         <div>
           <h1 className="mb-5">Clientes</h1>
-          {clients.map((client) => {
-            const stats = getClientStats(client.orders);
+          {clientsQuery.data.map((client) => {
             return (
               <ClientInfoSummary
                 key={client.phone}
-                name={client.name}
+                name={client.fullName}
                 phone={client.phone}
                 createdAt={new Date(client.createdAt)}
-                gmail={client.gmail}
-                orderSummary={`${client.orders.length} pedidos totales`}
+                email={client.email}
               >
-                <ClientOrderStats initialName={client.name} stats={stats} />
+                <ClientOrderStats
+                  clientNumber={client.phone}
+                  initialName={client.fullName}
+                />
               </ClientInfoSummary>
             );
           })}
