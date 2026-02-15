@@ -12,15 +12,8 @@
     {
       "idx": 1,
       "version": "7",
-      "when": 1771131129494,
-      "tag": "0001_orders_and_products_with_auth",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1771150669418,
-      "tag": "0002_add_shopCartUrl_to_orders",
+      "when": 1771151737600,
+      "tag": "0001_init_tables",
       "breakpoints": true
     }
   ]

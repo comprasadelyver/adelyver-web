@@ -1,34 +1,9 @@
 {
-  "id": "a2d4a65d-5574-44ec-9bd7-bc9f8980eb29",
+  "id": "66684533-4ab7-4c76-993e-8ab0c0f9af21",
   "prevId": "b65c4d12-8c6e-4f10-a7f3-1a23ee836879",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "auth.users": {
-      "name": "users",
-      "schema": "auth",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.orders": {
       "name": "orders",
       "schema": "",
@@ -50,7 +25,8 @@
           "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'pending_review'"
         },
         "package_cost": {
           "name": "package_cost",
@@ -80,6 +56,12 @@
           "notNull": true,
           "default": 0
         },
+        "shop_cart_url": {
+          "name": "shop_cart_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -96,22 +78,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "orders_client_id_users_id_fk": {
-          "name": "orders_client_id_users_id_fk",
-          "tableFrom": "orders",
-          "tableTo": "users",
-          "schemaTo": "auth",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {
@@ -186,7 +153,7 @@
           "name": "tracking_number",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
