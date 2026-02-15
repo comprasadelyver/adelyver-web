@@ -1,26 +1,16 @@
 "use client";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, RegisterFormData } from "../__schemas/register.schema";
-import { useRouter } from "next/navigation";
 import { Input } from "@/app/__components/ui/input";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/app/__components/ui/card";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/app/__components/ui/field";
+import { Field, FieldError, FieldGroup } from "@/app/__components/ui/field";
 import { Button } from "@/app/__components/ui/button";
-import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
-import { LoginData, loginSchema } from "../__schemas/login.schema";
 import { OrderFormData, orderFormSchema } from "../__schemas/orderForm.schema";
 import { Spinner } from "../__components/ui/spinner";
 import { cn } from "../__lib/utils";
@@ -28,7 +18,6 @@ import { createOrderByClientAction } from "@/features/actions/OrdersController.a
 import { toast } from "sonner";
 
 export default function OrderForm() {
-  const router = useRouter();
   const form = useForm<OrderFormData>({
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
@@ -38,22 +27,17 @@ export default function OrderForm() {
 
   const { isSubmitting } = form.formState;
   const onSubmit = async (data: OrderFormData) => {
-    try {
-      const res = await createOrderByClientAction({
-        shopCartUrl: data.website,
-      });
+    const res = await createOrderByClientAction({
+      shopCartUrl: data.website,
+    });
 
-      if (!res.ok) {
-        toast.error(res.error.message || "Error al crear el pedido");
-        return;
-      }
-
-      toast.success("Pedido enviado correctamente");
-      form.reset();
-      router.refresh();
-    } catch (error) {
-      toast.error("Ocurrió un fallo en la conexión");
+    if (!res.ok) {
+      toast.error(res.error.message ?? "Error al crear el pedido");
+      return;
     }
+
+    toast.success("Pedido enviado correctamente");
+    form.reset();
   };
 
   return (

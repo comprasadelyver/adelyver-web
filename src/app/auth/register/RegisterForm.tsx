@@ -2,8 +2,10 @@
 
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, RegisterFormData } from "../__schemas/register.schema";
-import { useRouter } from "next/navigation";
+import {
+  registerSchema,
+  RegisterFormData,
+} from "../../__schemas/register.schema";
 import { Input } from "@/app/__components/ui/input";
 import {
   Card,
@@ -20,13 +22,17 @@ import {
   FieldLabel,
 } from "@/app/__components/ui/field";
 import { Button } from "@/app/__components/ui/button";
-import { Spinner } from "../__components/ui/spinner";
-import { cn } from "../__lib/utils";
-import { createClientAction } from "@/features/actions/ClientsController.actions";
+import { Spinner } from "../../__components/ui/spinner";
+import { cn } from "../../__lib/utils";
+import { signupAction } from "@/features/actions/ClientsController.actions";
 import { toast } from "sonner";
+import { useState } from "react";
+
+import Lottie from "lottie-react";
+import notificationLetter from "@/app/__assets/lottie/notification-letter.json";
 
 export default function RegisterForm() {
-  const router = useRouter();
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -39,7 +45,7 @@ export default function RegisterForm() {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    const res = await createClientAction({
+    const res = await signupAction({
       fullName: data.name,
       password: data.password,
       phone: data.phone,
@@ -47,12 +53,36 @@ export default function RegisterForm() {
     });
 
     if (!res.ok) {
-      toast.error(res.error.message);
+      toast.error(`${res.error.message} (${res.error.code})`);
       return;
     }
-    toast.success("¡Bienvenido!");
-    router.refresh();
+
+    setIsRegistered(true);
   };
+
+  if (isRegistered)
+    return (
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle>¡Casi listo! Revisa tu correo</CardTitle>
+          <CardDescription>
+            Hemos enviado un enlace de verificación.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          Solo falta un último paso. Hemos enviado una notificación a tu correo
+          electrónico para confirmar tu cuenta. Por favor, busca el enlace de
+          verificación para comenzar.
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Lottie
+            className="[&_.secondary]:stroke-foreground [&_.primary]:stroke-ring grid [&>svg]:size-full h-48"
+            animationData={notificationLetter}
+            loop={false}
+          />
+        </CardFooter>
+      </Card>
+    );
 
   return (
     <Card className="w-full max-w-2xl">

@@ -15,6 +15,9 @@ export default function RootLayout({
       <body>
         <QueryProvider>{children}</QueryProvider>
         <Toaster />
+        <footer>
+          <a href="https://lordicon.com/">Icons by Lordicon.com</a>
+        </footer>
       </body>
     </html>
   );
