@@ -5,6 +5,7 @@ import IClientsController, {
 } from "../abstractions/IClientsController";
 import { supabaseAdmin, supabaseClient } from "../../lib/supabase/server";
 import { Result } from "../shared/Result";
+import { headers } from "next/headers";
 
 async function isAdmin(): Promise<boolean> {
   const supabase = await supabaseClient(); // Cookie-based client
@@ -184,10 +185,19 @@ export const SupabaseClientsController: IClientsController = {
     try {
       const supabase = await supabaseClient();
 
+      const headerList = await headers();
+      const host = headerList.get("host"); // e.g., localhost:3000 or mydomain.com
+      const protocol = headerList.get("x-forwarded-proto") || "http";
+
+      const origin = `${protocol}://${host}`;
+
       const { error } = await supabase.auth.signUp({
         email: req.email ?? undefined,
         phone: req.phone ?? undefined,
         password: req.password,
+        options: {
+          emailRedirectTo: `${origin}/auth/verification-callback`,
+        },
       });
 
       if (error) {
@@ -199,7 +209,7 @@ export const SupabaseClientsController: IClientsController = {
       if (error instanceof Error) {
         return Result.err({
           code: error.name,
-          message: error.message,
+          message: error.message + "LOL",
         });
       }
 

@@ -7,7 +7,6 @@ import { Input } from "@/app/__components/ui/input";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -19,14 +18,14 @@ import {
   FieldLabel,
 } from "@/app/__components/ui/field";
 import { Button } from "@/app/__components/ui/button";
-import { LoginData, loginSchema } from "../__schemas/login.schema";
 import {
   loginByEmailAction,
   loginByPhoneAction,
 } from "@/features/actions/ClientsController.actions";
 import { toast } from "sonner";
-import { Spinner } from "../__components/ui/spinner";
-import { cn } from "../__lib/utils";
+import { LoginData, loginSchema } from "@/app/__schemas/login.schema";
+import { Spinner } from "@/app/__components/ui/spinner";
+import { cn } from "@/app/__lib/utils";
 
 export default function Login() {
   const router = useRouter();

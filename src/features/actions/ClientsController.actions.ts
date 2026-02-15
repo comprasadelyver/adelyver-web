@@ -21,3 +21,7 @@ export const loginByEmailAction = createAction(
   "ClientsController",
   "loginByEmail"
 );
+
+export const signupAction = createAction("ClientsController", "signup");
+
+export const logoutAction = createAction("ClientsController", "logout");
