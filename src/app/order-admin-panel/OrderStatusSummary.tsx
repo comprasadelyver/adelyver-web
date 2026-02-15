@@ -31,7 +31,7 @@ import {
 } from "../__schemas/productFormValuesSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useClientGetOrderProducts from "@/queries/useGetOrderProducts";
+import useClientGetOrderProducts from "@/queries/useClientGetOrderProducts";
 
 type OrderStatusSummaryProps = {
   orderStatus: OrderStatus;
