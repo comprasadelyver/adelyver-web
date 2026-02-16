@@ -76,14 +76,10 @@ export default function FindClientForm() {
         </FieldGroup>
         <div className="flex justify-end mt-auto">
           <Button
-            form="find-client-form"
-            variant={"secondary"}
-            type="submit"
-            size={"icon-lg"}
-            className="rounded-full"
-            disabled={isSubmitting}
+            className="sticky ml-auto bottom-12 rounded-full p-0 size-fit aspect-square"
+            title="Encontrar cliente  "
           >
-            {isSubmitting ? <Spinner /> : <Search className="" />}
+            {isSubmitting ? <Spinner /> : <Search className="size-6" />}
           </Button>
         </div>
       </form>

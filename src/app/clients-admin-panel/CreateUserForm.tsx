@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientAction } from "@/features/actions/ClientsController.actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 type CreateUserFormProps = {
   onSuccess?: () => void;
@@ -26,6 +27,7 @@ export default function CreateUserForm({
   onLoading,
 }: CreateUserFormProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const form = useForm<CreateUserFormData>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
@@ -53,8 +55,11 @@ export default function CreateUserForm({
       }
 
       toast.success("Cliente creado correctamente");
+      await queryClient.invalidateQueries({ queryKey: ["clients"] });
+
       onSuccess?.();
-      router.refresh();
+    } catch (error) {
+      toast.error("Ocurrió un error inesperado");
     } finally {
       onLoading?.(false);
     }

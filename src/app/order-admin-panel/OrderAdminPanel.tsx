@@ -1,11 +1,18 @@
 "use client";
 import OrderStatusSummary from "./OrderStatusSummary";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useFindOrdersQuery from "@/queries/useFindOrdersQuery";
 import { Spinner } from "../__components/ui/spinner";
+import { Button } from "../__components/ui/button";
+import { BrushCleaning, X } from "lucide-react";
 
 export default function OrderAdminPanel() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const clientNameFilter = searchParams.get("clientName") ?? undefined;
+  const clientNumberFilter = searchParams.get("clientNumber") ?? undefined;
+
   const ordersQuery = useFindOrdersQuery({
     trackingNumber: searchParams.get("trackingNumber") ?? undefined,
     clientName: searchParams.get("clientName") ?? undefined,
@@ -14,6 +21,10 @@ export default function OrderAdminPanel() {
     ignoreCancelled: false,
     ignoreDelievered: false,
   });
+
+  const clearFilters = () => {
+    router.push("/clients-admin-panel");
+  };
 
   if (ordersQuery.isError) {
     return (
@@ -34,7 +45,14 @@ export default function OrderAdminPanel() {
   return (
     <>
       <div className="px-6 w-full max-w-2xl">
-        <h1 className="mb-5">Pedidos</h1>
+        {(clientNameFilter || clientNumberFilter) && (
+          <div className="flex items-center w-full gap-2 mb-6 p-2 ">
+            <span className="text-xl">
+              Pedidos de {clientNameFilter || clientNumberFilter}
+            </span>{" "}
+          </div>
+        )}
+
         {ordersQuery.data.length == 0 && <p>Aún no hay pedidos</p>}
         {ordersQuery.data.map((order) => (
           <OrderStatusSummary
@@ -47,6 +65,13 @@ export default function OrderAdminPanel() {
           />
         ))}
       </div>
+      <Button
+        onClick={clearFilters}
+        className="sticky ml-auto bottom-12 rounded-full p-0 size-fit aspect-square"
+        title="Limpiar filtros"
+      >
+        <BrushCleaning className="size-6" />
+      </Button>
     </>
   );
 }

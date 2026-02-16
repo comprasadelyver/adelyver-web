@@ -3,21 +3,25 @@ import {
   OrderStatus,
   OrderStatusValues,
 } from "@/features/models/OrderModel";
-import { Field, FieldLabel } from "../__components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "../__components/ui/field";
 import { Input } from "../__components/ui/input";
 import { Button } from "../__components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../__components/ui/drawer";
 import useFindOrdersQuery from "@/queries/useFindOrdersQuery";
 import { Spinner } from "../__components/ui/spinner";
+import Link from "next/link";
+import { Controller, useForm } from "react-hook-form";
+import {
+  updateClientNameData,
+  updateClientNameSchema,
+} from "../__schemas/updateClientName.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { findClientsAction } from "@/features/actions/ClientsController.actions";
+import { cn } from "../__lib/utils";
 
 type ClientOrderStatsProps = {
   initialName: string;
@@ -34,29 +38,81 @@ export default function ClientOrderStats({
     clientNumber,
   });
 
-  if (ordersQuery.isError) {
-    return <p>Ha ocurrido un error de tipo: {ordersQuery.error.message}</p>;
-  }
+  const form = useForm<updateClientNameData>({
+    resolver: zodResolver(updateClientNameSchema),
+    defaultValues: {
+      name: initialName,
+    },
+  });
 
-  if (ordersQuery.isLoading || !ordersQuery.data) {
-    return (
-      <span className="flex gap-4 items-center">
-        <Spinner />
-        <span>Cargando estadísticas...</span>
-      </span>
-    );
-  }
+  const onSubmit = async (data: updateClientNameData) => {
+    if (ordersQuery.isError) {
+      return (
+        <p className="text-destructive">Error: {ordersQuery.error.message}</p>
+      );
+    }
 
-  const stats = getClientStats(ordersQuery.data);
+    if (ordersQuery.isLoading || !ordersQuery.data) {
+      return (
+        <span className="flex gap-4 items-center">
+          <Spinner />
+          <span>Cargando estadísticas...</span>
+        </span>
+      );
+    }
+  };
+  const stats = getClientStats(ordersQuery.data ?? []);
+  const allOrders = ordersQuery.data ?? [];
+  const activeOrders = allOrders.filter((o) => o.status !== "cancelled");
+
+  const totalPaid = activeOrders.reduce(
+    (sum, o) => sum + o.moneyPaidByClient,
+    0
+  );
+  const totalDue = activeOrders.reduce(
+    (sum, o) => sum + (o.spentMoney - o.moneyPaidByClient),
+    0
+  );
+  const totalCancelled = allOrders
+    .filter((o) => o.status === "cancelled")
+    .reduce((sum, o) => sum + o.spentMoney, 0);
 
   return (
-    <div>
-      <Field>
-        <FieldLabel className="text-muted-foreground">
-          Nombre del cliente
-        </FieldLabel>
-        <Input type="text" defaultValue={initialName}></Input>
-      </Field>
+    <div className="">
+      <form id="update-client-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <Controller
+          control={form.control}
+          name="name"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Nombre del cliente</FieldLabel>
+              <Input
+                {...field}
+                type="text"
+                id="update-client-form-name"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <div className="grid grid-cols-[1fr_auto] mt-2">
+          {form.formState.isDirty && !form.formState.errors.name && (
+            <Button
+              type="submit"
+              className="col-start-2"
+              form="update-client-form"
+            >
+              <Spinner
+                data-icon="inline-start"
+                className={cn(!form.formState.isSubmitting && "hidden")}
+              />
+              Guardar cambios
+            </Button>
+          )}
+        </div>
+      </form>
+
       <div className="flex flex-col pt-6">
         <h4 className="bg-">Pedidos:</h4>
         {(Object.keys(OrderStatusValues) as OrderStatus[]).map((key) => (
@@ -66,10 +122,18 @@ export default function ClientOrderStats({
           </div>
         ))}
       </div>
-      <Button variant={"default"} className="w-[100%] mt-6">
-        Ver Pedidos
+
+      <Button asChild variant={"default"} className="w-[100%] mt-6">
+        <Link
+          href={`/order-admin-panel?clientNumber=${clientNumber}&clientName=${encodeURIComponent(
+            initialName
+          )}`}
+        >
+          Ver Pedidos
+        </Link>
       </Button>
-      <Drawer>
+
+      {/* <Drawer>
         <DrawerTrigger asChild>
           <Button variant={"secondary"} className="w-[100%] mt-6">
             Eliminar Cliente
@@ -90,7 +154,7 @@ export default function ClientOrderStats({
             </DrawerClose>
           </DrawerFooter>
         </DrawerContent>
-      </Drawer>
+      </Drawer> */}
     </div>
   );
 }

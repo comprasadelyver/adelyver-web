@@ -48,6 +48,7 @@ export default function AdminLoginForm() {
       return;
     }
     toast.success("¡Bienvenido!");
+    router.push("/clients-admin-panel");
     router.refresh();
   };
 
