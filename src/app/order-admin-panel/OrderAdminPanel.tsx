@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import useFindOrdersQuery from "@/queries/useFindOrdersQuery";
 import { Spinner } from "../__components/ui/spinner";
 
-export default function AdminOrderEdit() {
+export default function OrderAdminPanel() {
   const searchParams = useSearchParams();
   const ordersQuery = useFindOrdersQuery({
     trackingNumber: searchParams.get("trackingNumber") ?? undefined,
@@ -35,13 +35,15 @@ export default function AdminOrderEdit() {
     <>
       <div className="px-6 w-full max-w-2xl">
         <h1 className="mb-5">Pedidos</h1>
-        {ordersQuery.data.length == 0} {<p>Aún no hay pedidos</p>}
+        {ordersQuery.data.length == 0 && <p>Aún no hay pedidos</p>}
         {ordersQuery.data.map((order) => (
           <OrderStatusSummary
             key={order.id}
             orderId={order.id}
             orderStatus={order.status}
-            createdAt={new Date()}
+            createdAt={order.createdAt}
+            spentMoney={String(order.spentMoney)}
+            moneyPaidByClient={String(order.moneyPaidByClient)}
           />
         ))}
       </div>

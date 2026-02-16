@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   FindClientFormData,
   findClientFormSchema,
@@ -16,21 +16,29 @@ import { Input } from "../__components/ui/input";
 import { Button } from "../__components/ui/button";
 import { Spinner } from "../__components/ui/spinner";
 import { cn } from "../__lib/utils";
-import { Search } from "lucide-react";
+import { Phone, Search } from "lucide-react";
+import useGetClients from "@/queries/useGetClientsQuery";
 
 export default function FindClientForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const form = useForm<FindClientFormData>({
     resolver: zodResolver(findClientFormSchema),
     defaultValues: {
-      name: "",
-      phone: "",
+      name: searchParams.get("name") ?? "",
+      phone: searchParams.get("phone") ?? "",
     },
   });
   const { isSubmitting } = form.formState;
 
-  const onSubmit = async (data: FindClientFormData) => {};
+  const onSubmit = async (data: FindClientFormData) => {
+    const params = new URLSearchParams();
+    if (data.name) params.set("name", data.name);
+    if (data.phone) params.set("phone", data.phone);
+
+    router.push(`/clients-admin-panel?${params.toString()}`);
+  };
 
   return (
     <div className="w-full max-w-lg px-6 pb-6 grid grid-rows-[auto_1fr]">
@@ -77,11 +85,7 @@ export default function FindClientForm() {
             className="rounded-full"
             disabled={isSubmitting}
           >
-            <Spinner
-              data-icon="inline-start"
-              className={cn(!form.formState.isSubmitting && "hidden")}
-            />
-            <Search />
+            {isSubmitting ? <Spinner/> : <Search className="" />}
           </Button>
         </div>
       </form>

@@ -30,7 +30,6 @@ export default function AdminSelectStatus({value, onValueChange}:AdminSelectStat
             <SelectItem value="confirmed">Confirmado</SelectItem>
             <SelectItem value="waiting_for_payment">Esperando pago</SelectItem>
             <SelectItem value="delivered">Entregado</SelectItem>
-            <SelectItem value="cancelled">Cancelado</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

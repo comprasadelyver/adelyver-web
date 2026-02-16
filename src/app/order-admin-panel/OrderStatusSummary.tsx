@@ -32,18 +32,24 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useClientGetOrderProducts from "@/queries/useClientGetOrderProducts";
+import { useUpdateOrder } from "@/mutations/useUpdateAdminOrder";
 
 type OrderStatusSummaryProps = {
   orderStatus: OrderStatus;
   createdAt: Date;
   orderId: string;
+  spentMoney: string;
+  moneyPaidByClient: string;
 };
 export default function OrderStatusSummary({
   orderStatus: initialStatus,
   createdAt,
   orderId,
+  spentMoney,
+  moneyPaidByClient,
 }: OrderStatusSummaryProps) {
   const productsQuery = useClientGetOrderProducts(orderId);
+  const updateOrderMutation = useUpdateOrder();
 
   const [currentStatus, setCurrentStatus] =
     useState<OrderStatus>(initialStatus);
@@ -61,25 +67,27 @@ export default function OrderStatusSummary({
   const onSubmit = (data: ProductFormValues) => {
     console.log("Datos válidos:", data);
   };
+  const handleCancelOrder = () => {
+    updateOrderMutation.mutate(
+      {
+        orderId,
+        status: "cancelled",
+        spentMoney: Number(spentMoney),
+        paidByClient: Number(moneyPaidByClient),
+      },
+      {
+        onSuccess: () => {
+          setCurrentStatus("cancelled" as OrderStatus);
+        },
+      }
+    );
+  };
 
   if (productsQuery.isError) {
-    return (
-      <p>
-        Ha ocurrido un error cargando los productos:{" "}
-        {productsQuery.error.message}
-      </p>
-    );
+    return <p>Ha ocurrido un error de tipo: {productsQuery.error.message}</p>;
   }
 
-  if (productsQuery.isLoading || !productsQuery.data) {
-    return (
-      <span className="flex gap-2">
-        <Spinner />
-        <span>Cargando productos...</span>
-      </span>
-    );
-  }
-
+  const products = productsQuery.data ?? [];
   const createdBy = "lol";
 
   return (
@@ -107,7 +115,14 @@ export default function OrderStatusSummary({
                   {createdBy && ` por ${createdBy}`}
                 </p>
                 <p className="font-light text-sm line-clamp-1">
-                  {productsQuery.data.map((p) => p.name).join(", ")}
+                  {productsQuery.isLoading || !productsQuery.data ? (
+                    <span className="flex gap-1 items-center">
+                      <Spinner />
+                      <span>Cargando productos....</span>
+                    </span>
+                  ) : (
+                    productsQuery.data.map((p) => p.name).join(", ")
+                  )}
                 </p>
               </div>
             </AccordionTrigger>
@@ -117,11 +132,11 @@ export default function OrderStatusSummary({
                   currentStatus={currentStatus}
                   onStatusChange={setCurrentStatus}
                 />
-                <ProductAdminEdit
+                {/* <ProductAdminEdit
                   form={form}
                   products={productsQuery.data}
                   createdBy={createdBy}
-                />
+                /> */}
                 <div className="grid gap-y-5 mt-10 ">
                   <Drawer>
                     <DrawerTrigger asChild>
@@ -168,12 +183,21 @@ export default function OrderStatusSummary({
                       <DrawerHeader>
                         <DrawerTitle>Cancelar Pedido</DrawerTitle>
                         <DrawerDescription>
-                          Está seguro que desea eliminar este pedido? Esta
+                          Está seguro que desea cancelar este pedido? Esta
                           acción no se puede deshacer
                         </DrawerDescription>
                       </DrawerHeader>
                       <DrawerFooter>
-                        <Button variant="destructive">Cancelar Pedido</Button>
+                        <Button
+                          variant="destructive"
+                          onClick={handleCancelOrder}
+                          disabled={updateOrderMutation.isPending}
+                        >
+                          {updateOrderMutation.isPending && (
+                            <Spinner className="mr-2" />
+                          )}
+                          Confirmar Cancelación
+                        </Button>
                         <DrawerClose asChild>
                           <Button variant="secondary">Atrás</Button>
                         </DrawerClose>
