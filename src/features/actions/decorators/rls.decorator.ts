@@ -15,6 +15,7 @@ export function withSessionRls<P extends unknown[], R>(
       {
         role: data?.claims.role ?? "anon",
         id: data?.claims.sub ?? null,
+        isAdmin: data?.claims.app_metadata?.role === "admin",
       },
       callback
     )(...args);
@@ -34,8 +35,9 @@ export function withNetworkRls<P extends unknown[], R>(
     return withRls(
       tx,
       {
-        role: user?.role ?? user?.app_metadata?.role ?? "anon",
+        role: user?.role ?? "anon",
         id: user?.id ?? null,
+        isAdmin: user?.app_metadata?.role === "admin",
       },
       callback
     )(...args);
@@ -47,12 +49,16 @@ export function withRls<P extends unknown[], R>(
   user: {
     role: string;
     id: string | null;
+    isAdmin: boolean;
   },
   callback: (...args: P) => Promise<R>
 ) {
   return async (...args: P): Promise<R> => {
     const role = user?.role ?? "anon";
-    const jwtClaims = JSON.stringify({ sub: user?.id ?? null, role });
+    const jwtClaims = JSON.stringify({
+      sub: user?.id ?? null,
+      role: user.isAdmin ? "admin" : role,
+    });
 
     await tx.execute(sql`SET LOCAL ROLE ${sql.raw(role)}`);
     await tx.execute(
