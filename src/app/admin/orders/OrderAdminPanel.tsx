@@ -23,7 +23,7 @@ export default function OrderAdminPanel() {
   });
 
   const clearFilters = () => {
-    router.push("/clients-admin-panel");
+    router.push("/admin/");
   };
 
   if (ordersQuery.isError) {
@@ -66,9 +66,9 @@ export default function OrderAdminPanel() {
         ))}
       </div>
       <Button
-        onClick={clearFilters}
+        
         className="sticky ml-auto bottom-12 rounded-full p-0 size-fit aspect-square"
-        title="Limpiar filtros"
+        title="Añadir Pedido"
       >
         <BrushCleaning className="size-6" />
       </Button>

@@ -36,7 +36,7 @@ export default function FindClientForm() {
     if (data.name) params.set("name", data.name);
     if (data.phone) params.set("phone", data.phone);
 
-    router.push(`/clients-admin-panel?${params.toString()}`);
+    router.push(`/admin/clients?${params.toString()}`);
   };
 
   return (

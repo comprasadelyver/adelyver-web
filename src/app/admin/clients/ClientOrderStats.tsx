@@ -90,7 +90,7 @@ export default function ClientOrderStats({
             </Field>
           )}
         />
-        <div className="grid grid-cols-[1fr_auto] mt-2">
+        <div className="grid grid-cols-[1fr_auto] mt-4">
           {form.formState.isDirty && !form.formState.errors.name && (
             <Button
               type="submit"
@@ -117,9 +117,28 @@ export default function ClientOrderStats({
         ))}
       </div>
 
+      <div className="mt-5">
+        {[
+          { label: "Total pagado", value: totalPaid },
+          {
+            label: "Total por pagar",
+            value: totalDue,
+          },
+          {
+            label: "Total cancelado",
+            value: totalCancelled,
+          },
+        ].map((item) => (
+          <div key={item.label} className="flex justify-between   ">
+            <span>{item.label}:</span>
+            <span className={cn()}>${item.value.toLocaleString()}</span>
+          </div>
+        ))}
+      </div>
+
       <Button asChild variant={"default"} className="w-[100%] mt-6">
         <Link
-          href={`/order-admin-panel?clientNumber=${clientNumber}&clientName=${encodeURIComponent(
+          href={`/admin/orders?clientNumber=${clientNumber}&clientName=${encodeURIComponent(
             initialName
           )}`}
         >

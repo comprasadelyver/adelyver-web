@@ -72,7 +72,7 @@ export default function ClientInfoSummary({
           </div>
         </AccordionItem>
       </Accordion>
-      <Separator></Separator>
+      <Separator />
     </>
   );
 }
