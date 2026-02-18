@@ -16,6 +16,7 @@ export default function useFindOrdersQuery(req: FindOrdersRequest) {
       req.ignoreDelievered,
     ],
     queryFn: async () => {
+      console.log("req", req);
       const res = await findOrdersAction(req);
 
       if (res.ok) {
