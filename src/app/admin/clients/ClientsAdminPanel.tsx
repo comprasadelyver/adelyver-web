@@ -85,32 +85,30 @@ export default function ClientsAdminPanel() {
   }
 
   return (
-    <div className="px-6 w-full max-w-2xl">
-      <h1 className="mb-5 text-2xl font-bold">Clientes</h1>
-      <div className="flex flex-col gap-4 ">
-        {clientsQuery.data.map((client) => (
-          <ClientInfoSummary
-            key={client.phone}
-            name={client.fullName}
-            phone={client.phone}
-            createdAt={new Date(client.createdAt)}
-            email={client.email}
-          >
-            <ClientOrderStats
-              clientNumber={client.phone}
-              initialName={client.fullName}
-            />
-          </ClientInfoSummary>
-        ))}
-      </div>
+    <div className="flex flex-col gap-4 ">
       <CreateUserForm>
         <Button
-          className="sticky ml-auto bottom-12 rounded-full p-0 size-fit aspect-square"
+          variant="secondary"
+          className="w-fit ml-auto"
           title="Abrir formulario de crear orden"
         >
-          <Plus className="size-6" />
+          <Plus className="size-6" /> Añadir cliente
         </Button>
       </CreateUserForm>
+      {clientsQuery.data.map((client) => (
+        <ClientInfoSummary
+          key={client.phone}
+          name={client.fullName}
+          phone={client.phone}
+          createdAt={new Date(client.createdAt)}
+          email={client.email}
+        >
+          <ClientOrderStats
+            clientNumber={client.phone}
+            initialName={client.fullName}
+          />
+        </ClientInfoSummary>
+      ))}
     </div>
   );
 }

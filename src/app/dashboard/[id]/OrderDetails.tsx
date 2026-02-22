@@ -32,13 +32,13 @@ export default function OrderDetails() {
     return <p className="p-10 text-center">Pedido no encontrado</p>;
 
   const description = OrderStatusDescriptions[orderQuery.data.status];
-  const { label, progress } = getOrderStatusInfo(orderQuery.data.status);
+  const { label } = getOrderStatusInfo(orderQuery.data.status);
 
   return (
     <div className="px-6 w-full max-w-2xl grid gap-4">
       <div className="mr-auto grid grid-cols-[auto_1fr_auto] gap-y-1 gap-x-4 py-4">
         <div className="row-span-3 h-fit place-self-center">
-          <CircularProgress size={64} progress={progress}></CircularProgress>
+          <CircularProgress size={64} status={orderQuery.data.status} />
         </div>
         <h3 className="text-xl">{label}</h3>
         <p className="col-start-2 font-light text-sm">

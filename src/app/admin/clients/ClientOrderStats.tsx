@@ -145,29 +145,6 @@ export default function ClientOrderStats({
           Ver Pedidos
         </Link>
       </Button>
-
-      {/* <Drawer>
-        <DrawerTrigger asChild>
-          <Button variant={"secondary"} className="w-[100%] mt-6">
-            Eliminar Cliente
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Eliminar Cliente</DrawerTitle>
-            <DrawerDescription>
-              Está seguro que desea eliminar este cliente? Esta acción no se
-              puede deshacer
-            </DrawerDescription>
-          </DrawerHeader>
-          <DrawerFooter>
-            <Button variant={"destructive"}>Eliminar</Button>
-            <DrawerClose asChild>
-              <Button variant="secondary">Atrás</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer> */}
     </div>
   );
 }

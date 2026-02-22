@@ -40,7 +40,7 @@ export default function ClientInfoSummary({
       <Accordion type="single" collapsible className="max-w-lg">
         <AccordionItem value={phone.toString()} className="border-none">
           <div className="">
-            <AccordionTrigger className="[&>svg]:h-6 [&>svg]:w-6 w-[100%] text-gray-400 hover:no-underline hover:text-primary transition-colors">
+            <AccordionTrigger className="[&>svg]:h-6 [&>svg]:w-6 w-[100%] hover:no-underline hover:text-primary transition-colors">
               <div className="text-left">
                 <div className="flex items-baseline gap-x-2">
                   <h2 className="text-xl font-semibold text-foreground truncate max-w-xs">
@@ -68,7 +68,7 @@ export default function ClientInfoSummary({
                 )}
               </div>
             </AccordionTrigger>
-            <AccordionContent>{children}</AccordionContent>
+            <AccordionContent> {children}</AccordionContent>
           </div>
         </AccordionItem>
       </Accordion>

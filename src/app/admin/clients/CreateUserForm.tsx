@@ -83,7 +83,7 @@ export default function CreateUserForm({
             Guardar Usuario
           </Button>
           <DrawerClose asChild>
-            <Button variant="secondary">Atrás</Button>
+            <Button variant="ghost">Atrás</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

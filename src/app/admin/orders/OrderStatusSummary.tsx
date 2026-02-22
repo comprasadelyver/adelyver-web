@@ -25,6 +25,7 @@ import { useUpdateOrder } from "@/mutations/useUpdateAdminOrder";
 import CircularProgress from "@/app/__components/CircularProgress";
 import CreateProductForm from "./CreateProductForm";
 import ProductAdminEdit from "./ProductAdminEdit";
+import { BanIcon } from "lucide-react";
 
 type OrderStatusSummaryProps = {
   order: OrderModel;
@@ -32,16 +33,16 @@ type OrderStatusSummaryProps = {
 export default function OrderStatusSummary({ order }: OrderStatusSummaryProps) {
   const updateOrderMutation = useUpdateOrder();
 
-  const { label, progress, color } = getOrderStatusInfo(order.status);
+  const { label } = getOrderStatusInfo(order.status);
 
   return (
     <Accordion type="single" collapsible className="max-w-lg">
       <AccordionItem className="" value="shipping">
         <div className="grid grid-cols-[auto_1fr] gap-y-1 gap-x-4 items-center">
           <div>
-            <CircularProgress size={64} progress={progress} color={color} />
+            <CircularProgress size={64} status={order.status} />
           </div>
-          <AccordionTrigger className="[&>svg]:h-6 [&>svg]:w-6 w-[100%] text-gray-400 hover:no-underline hover:text-primary transition-colors">
+          <AccordionTrigger className="[&>svg]:h-6 [&>svg]:w-6 w-[100%] hover:no-underline hover:text-primary transition-colors">
             <div className="text-left">
               <h3 className="text-xl">{label}</h3>
               <p className="font-light text-sm">
@@ -64,7 +65,9 @@ export default function OrderStatusSummary({ order }: OrderStatusSummaryProps) {
                 <CreateProductForm orderId={order.id} />
                 <Drawer>
                   <DrawerTrigger asChild>
-                    <Button variant={"secondary"}>Cancelar Pedido</Button>
+                    <Button variant="secondary">
+                      <BanIcon /> Cancelar Pedido
+                    </Button>
                   </DrawerTrigger>
                   <DrawerContent>
                     <DrawerHeader>

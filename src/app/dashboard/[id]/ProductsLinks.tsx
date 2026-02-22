@@ -48,7 +48,7 @@ export default function ProductsLinks({ order }: productLinkProps) {
           >
             <SquareArrowOutUpRight
               size={28}
-              className=" text-gray-400 hover:text-primary transition-colors self-start"
+              className="hover:text-primary transition-colors self-start"
             />
           </Link>
           <p className="font-light text-sm col-start-1 truncate">

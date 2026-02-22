@@ -14,15 +14,15 @@ export default function OrderItemStatus({
   orderId,
   createdAt,
 }: OrderItemStatusProps) {
-  const { label, progress, color } = getOrderStatusInfo(orderStatus);
+  const { label } = getOrderStatusInfo(orderStatus);
 
   return (
     <Link
       href={`/dashboard/${orderId}`}
-      className="mr-auto grid grid-cols-[auto_1fr_auto] gap-y-1 gap-x-4 py-4  text-gray-400 hover:text-primary transition-colors"
+      className="mr-auto grid grid-cols-[auto_1fr_auto] gap-y-1 gap-x-4 py-4 hover:text-primary transition-colors"
     >
       <div className="row-span-3 h-fit place-self-center">
-        <CircularProgress size={64} progress={progress} color={color} />
+        <CircularProgress size={64} status={orderStatus} />
       </div>
       <h3 className="text-xl">{label}</h3>
       <ChevronRightIcon size={24} className=" row-span-3 self-center" />

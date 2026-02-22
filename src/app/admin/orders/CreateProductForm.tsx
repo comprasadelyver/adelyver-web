@@ -20,6 +20,7 @@ import { Button } from "@/app/__components/ui/button";
 import { Spinner } from "@/app/__components/ui/spinner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { PlusIcon } from "lucide-react";
 
 type CreateProductFormProps = {
   orderId: string;
@@ -56,7 +57,9 @@ export default function CreateProductForm({ orderId }: CreateProductFormProps) {
   return (
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
       <DrawerTrigger asChild>
-        <Button variant={"outline"}>Añadir Producto</Button>
+        <Button>
+          <PlusIcon className="size-6" /> Añadir Producto
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
@@ -79,7 +82,7 @@ export default function CreateProductForm({ orderId }: CreateProductFormProps) {
             Añadir
           </Button>
           <DrawerClose asChild>
-            <Button variant="secondary">Atrás</Button>
+            <Button variant="ghost">Atrás</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

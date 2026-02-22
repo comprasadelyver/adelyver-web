@@ -71,7 +71,7 @@ export default function ProductAdminEdit({ orderId }: ProductAdminEditProps) {
           {items?.map((product) => (
             <div
               key={product.id}
-              className="grid grid-cols-[1fr_auto] items-center gap-x-4 border-b last:border-none pb-4 last:pb-0 text-primary "
+              className="grid grid-cols-[1fr_auto] items-center gap-x-4 border-b last:border-none pb-4 last:pb-0"
             >
               <div className="flex flex-col min-w-0">
                 <h4 className="text-lg font-semibold tracking-tight">
@@ -121,7 +121,7 @@ export default function ProductAdminEdit({ orderId }: ProductAdminEditProps) {
                     <DrawerFooter>
                       <Button variant="destructive">Eliminar Producto</Button>
                       <DrawerClose asChild>
-                        <Button variant="secondary">Atrás</Button>
+                        <Button variant="ghost">Atrás</Button>
                       </DrawerClose>
                     </DrawerFooter>
                   </DrawerContent>
@@ -145,7 +145,7 @@ export default function ProductAdminEdit({ orderId }: ProductAdminEditProps) {
                       <DrawerFooter className="border-t bg-background">
                         <Button>Guardar Cambios</Button>
                         <DrawerClose asChild>
-                          <Button variant="secondary">Atrás</Button>
+                          <Button variant="ghost">Atrás</Button>
                         </DrawerClose>
                       </DrawerFooter>
                     </div>

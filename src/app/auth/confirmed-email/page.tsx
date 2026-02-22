@@ -28,7 +28,7 @@ export default function ConfirmedEmailPage() {
 
         <main className="w-full max-w-3xl grid justify-center gap-8">
           <Lottie
-            className="[&_.secondary]:stroke-foreground [&_.primary]:stroke-ring grid [&>svg]:size-full h-48"
+            className="[&_.secondary]:stroke-input [&_.primary]:stroke-accent-foreground grid [&>svg]:size-full h-48"
             animationData={confetti}
             loop={false}
           />

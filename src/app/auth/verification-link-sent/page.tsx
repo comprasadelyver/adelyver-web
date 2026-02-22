@@ -9,12 +9,14 @@ export default function VerificationSentPage() {
       <div>
         <header className="mb-16 text-center max-w-3xl w-full">
           <h1 className="text-h1 mb-4">¡Casi listo! Revisa tu correo</h1>
-          <p className="text-lead">Hemos enviado un enlace de verificación.</p>
+          <p className="text-lead">
+            Te hemos enviado un enlace de verificación.
+          </p>
         </header>
 
         <main className="w-full max-w-3xl grid justify-center gap-8">
           <Lottie
-            className="[&_.secondary]:stroke-foreground [&_.primary]:stroke-ring grid [&>svg]:size-full h-48"
+            className="[&_.secondary]:stroke-accent-foreground [&_.primary]:stroke-input grid [&>svg]:size-full h-48"
             animationData={notificationLetter}
             loop={false}
           />
