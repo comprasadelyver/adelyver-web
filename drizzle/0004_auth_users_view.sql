@@ -1,0 +1,1 @@
+CREATE VIEW "public"."user_search" AS (SELECT id, email, phone, raw_user_meta_data->>'full_name' as full_name FROM auth.users);

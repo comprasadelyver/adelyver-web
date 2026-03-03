@@ -36,7 +36,7 @@ export type ClientOrderDto = Omit<OrderModel, "spentMoney">;
 
 export type FindOrdersRequest = {
   trackingNumber?: string;
-  productId?: string;
+  storeProductId?: string;
   clientNumber?: string;
   clientName?: string;
   createdAfter?: Date;

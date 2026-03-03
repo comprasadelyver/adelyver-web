@@ -7,7 +7,7 @@ export default function useFindOrdersQuery(req: FindOrdersRequest) {
     queryKey: [
       "orders",
       req.trackingNumber,
-      req.productId,
+      req.storeProductId,
       req.clientNumber,
       req.clientName,
       req.createdAfter,

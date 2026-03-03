@@ -39,6 +39,8 @@ export default function FindOrderFilter() {
       clientName: searchParams.get("clientName") ?? "",
       createdAfter: null,
       createdBefore: null,
+      ignoreCancelled: true,
+      ignoreDelivered: false,
     },
   });
   const { isSubmitting } = form.formState;
@@ -56,6 +58,9 @@ export default function FindOrderFilter() {
     if (data.createdBefore) {
       params.set("createdBefore", format(data.createdBefore, "yyyy-MM-dd"));
     }
+
+    if (data.ignoreDelivered) params.set("ignoreDelivered", "true");
+    if (data.ignoreCancelled) params.set("ignoreCancelled", "true");
 
     router.push(`/admin/orders?${params.toString()}`);
   };
@@ -112,6 +117,40 @@ export default function FindOrderFilter() {
           )}
         />
         <Controller
+          name="createdAfter"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel>Creado después de:</FieldLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className="gap-1 data-[empty-true]:text-muted-foreground w-[212px] justify-between font-normal text-muted-foreground"
+                  >
+                    <span className="">
+                      {field.value
+                        ? format(field.value, "PP")
+                        : "Seleccionar fecha"}
+                    </span>
+                    <CalendarIcon className="size-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value ?? undefined}
+                    onSelect={field.onChange}
+                    defaultMonth={field.value ?? undefined}
+                    disabled={(date) => date > new Date()}
+                  />
+                </PopoverContent>
+              </Popover>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
           name="createdBefore"
           control={form.control}
           render={({ field, fieldState }) => (
@@ -147,73 +186,42 @@ export default function FindOrderFilter() {
             </Field>
           )}
         />
-        <Controller
-          name="createdAfter"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Creado después de:</FieldLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className="gap-1 data-[empty-true]:text-muted-foreground w-[212px] justify-between font-normal text-muted-foreground"
-                  >
-                    <span className="">
-                      {field.value
-                        ? format(field.value, "PP")
-                        : "Seleccionar fecha"}
-                    </span>
-                    <CalendarIcon className="size-4" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value ?? undefined}
-                    onSelect={field.onChange}
-                    defaultMonth={field.value ?? undefined}
-                    disabled={(date) => date > new Date()}
-                  />
-                </PopoverContent>
-              </Popover>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
       </FieldGroup>
 
       <FieldGroup className="mt-15">
         <Controller
           control={form.control}
-          name="ignoreDelivered"
-          render={({ field }) => (
-            <Field orientation={"horizontal"}>
+          name="ignoreCancelled"
+          render={({ field, fieldState }) => (
+            <Field orientation={"horizontal"} data-invalid={fieldState.invalid}>
               <Switch
                 {...field}
                 name="ignoreDelivered-checkbox"
                 onCheckedChange={field.onChange}
                 value={field.value ? "true" : "false"}
+                checked={field.value}
               />
               <FieldLabel
                 htmlFor="ignoreDelivered-checkbox"
                 className="text-sm"
               >
-                Ignorar recogidos
+                Ignorar cancelados
               </FieldLabel>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
         <Controller
           control={form.control}
           name="ignoreDelivered"
-          render={({ field }) => (
-            <Field orientation={"horizontal"}>
+          render={({ field, fieldState }) => (
+            <Field orientation={"horizontal"} data-invalid={fieldState.invalid}>
               <Switch
                 {...field}
                 name="ignoreDelivered-checkbox"
                 onCheckedChange={field.onChange}
                 value={field.value ? "true" : "false"}
+                checked={field.value}
               />
               <FieldLabel
                 htmlFor="ignoreDelivered-checkbox"
@@ -221,6 +229,7 @@ export default function FindOrderFilter() {
               >
                 Ignorar entregados
               </FieldLabel>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />

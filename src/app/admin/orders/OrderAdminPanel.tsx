@@ -11,6 +11,7 @@ import {
   EmptyTitle,
 } from "@/app/__components/ui/empty";
 import { ClipboardPlusIcon } from "lucide-react";
+import { FindOrdersRequest } from "@/features/abstractions/IOrderController";
 
 export default function OrderAdminPanel() {
   const searchParams = useSearchParams();
@@ -24,11 +25,11 @@ export default function OrderAdminPanel() {
   const createdAfter = searchParams.get("createdAfter") ?? undefined;
   const createdBefore = searchParams.get("createdBefore") ?? undefined;
 
-  const req = {
+  const req: FindOrdersRequest = {
     trackingNumber,
     clientName,
     clientNumber,
-    productId,
+    storeProductId: productId,
     ignoreCancelled,
     ignoreDelievered,
     createdAfter: createdAfter ? new Date(createdAfter) : undefined,

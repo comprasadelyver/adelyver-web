@@ -1,4 +1,4 @@
-import { supabaseClient } from "@/lib/supabase/server";
+import { supabaseAdmin, supabaseClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -10,9 +10,20 @@ export async function GET(request: Request) {
     const supabase = await supabaseClient();
 
     // This exchanges the "code" for an active user session
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { error, data } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      const adminClient = supabaseAdmin();
+
+      const phoneNumber = data.user.user_metadata?.phone_number;
+
+      if (phoneNumber) {
+        await adminClient.auth.admin.updateUserById(data.user.id, {
+          phone: phoneNumber,
+          phone_confirm: true,
+        });
+      }
+
       return NextResponse.redirect(`${origin}${next}`);
     }
 

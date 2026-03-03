@@ -194,13 +194,13 @@ export const SupabaseClientsController: IClientsController = {
       const origin = `${protocol}://${host}`;
 
       const { error } = await supabase.auth.signUp({
-        email: req.email ?? undefined,
-        phone: req.phone ?? undefined,
+        email: req.email!,
         password: req.password,
         options: {
           emailRedirectTo: `${origin}/auth/verification-callback`,
           data: {
             full_name: req.fullName,
+            phone_number: req.phone,
           },
         },
       });

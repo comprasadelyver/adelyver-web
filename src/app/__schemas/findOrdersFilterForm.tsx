@@ -2,12 +2,13 @@ import { z } from "zod";
 
 export const findOrdersFilterFormSchema = z
   .object({
-    trackingNumber: z.string(),
-    productId: z.string(),
+    trackingNumber: z.string().optional(),
+    productId: z.string().optional(),
     clientNumber: z
       .string()
-      .regex(/^[0-9]*$/, "El teléfono solo debe contener números"),
-    clientName: z.string(),
+      .regex(/^[0-9]*$/, "El teléfono solo debe contener números")
+      .optional(),
+    clientName: z.string().optional(),
 
     createdAfter: z.date().nullable().optional(),
     createdBefore: z.date().nullable().optional(),

@@ -1,4 +1,4 @@
-import { eq, sql, ilike, desc } from "drizzle-orm";
+import { eq, sql, desc, exists, and, ilike } from "drizzle-orm";
 import IOrdersController, {
   ClientOrderDto,
   FindOrdersRequest,
@@ -13,8 +13,8 @@ import { Result } from "../shared/Result";
 import { ProductModel } from "../models/ProductModel";
 import { OrderModel } from "../models/OrderModel";
 import { randomUUID } from "crypto";
-import { orders, products } from "./db/schema";
-import { TransactionType } from "./db";
+import { orders, products, userSearch } from "./db/schema";
+import { db, TransactionType } from "./db";
 
 export const createSupabaseOrdersController = (
   tx: TransactionType
@@ -79,7 +79,7 @@ export const createSupabaseOrdersController = (
         data.map((p) => ({
           id: p.id,
           orderId: p.orderId,
-          idFromShop: p.storeOrderId,
+          idFromShop: p.storeProductId,
           name: p.name,
           url: p.url,
           trackingNumber: p.trackingNumber,
@@ -92,14 +92,10 @@ export const createSupabaseOrdersController = (
     findOrders: async (
       req: FindOrdersRequest
     ): Promise<Result<OrderModel[]>> => {
-      const data = await tx.query.orders.findMany({
-        where: (orders, { and, ne, exists }) => {
+      console.log("req", req);
+      const query = tx.query.orders.findMany({
+        where: () => {
           const conditions = [];
-
-          if (req.ignoreCancelled)
-            conditions.push(ne(orders.status, "cancelled"));
-          if (req.ignoreDelievered)
-            conditions.push(ne(orders.status, "delivered"));
 
           if (req.trackingNumber) {
             conditions.push(
@@ -117,10 +113,73 @@ export const createSupabaseOrdersController = (
             );
           }
 
+          if (req.storeProductId) {
+            conditions.push(
+              exists(
+                tx
+                  .select()
+                  .from(products)
+                  .where(
+                    and(
+                      eq(products.orderId, orders.id),
+                      ilike(products.storeProductId, `%${req.storeProductId}%`)
+                    )
+                  )
+              )
+            );
+          }
+
+          if (req.clientNumber) {
+            conditions.push(
+              exists(
+                db
+                  .select()
+                  .from(userSearch)
+                  .where(
+                    and(
+                      eq(userSearch.id, orders.clientId),
+                      ilike(userSearch.phone, `%${req.clientNumber}%`)
+                    )
+                  )
+              )
+            );
+          }
+
+          if (req.clientName) {
+            conditions.push(
+              exists(
+                db
+                  .select({ id: userSearch.id })
+                  .from(userSearch)
+                  .where(
+                    and(
+                      eq(userSearch.id, orders.clientId),
+                      ilike(userSearch.fullName, `%${req.clientName}%`)
+                    )
+                  )
+              )
+            );
+          }
+
+          // if (req.createdAfter) {
+          //   conditions.push(gte(row.createdAt, req.createdAfter));
+          // }
+          // if (req.createdBefore) {
+          //   conditions.push(lte(row.createdAt, req.createdBefore));
+          // }
+
+          // if (req.ignoreCancelled) conditions.push(ne(row.status, "cancelled"));
+          // if (req.ignoreDelievered)
+          //   conditions.push(ne(row.status, "delivered"));
+
+          console.log("conditions", conditions);
           return and(...conditions);
         },
         orderBy: desc(orders.updatedAt),
       });
+
+      console.log("query", query.toSQL());
+      const data = await query;
 
       return Result.ok(
         data.map(
@@ -222,7 +281,7 @@ export const createSupabaseOrdersController = (
       await tx.insert(products).values({
         id: randomUUID(),
         orderId: req.orderId,
-        storeOrderId: req.idFromShop,
+        storeProductId: req.idFromShop,
         url: req.url,
         name: req.name,
         trackingNumber: req.trackingNumber,
@@ -238,7 +297,7 @@ export const createSupabaseOrdersController = (
         .set({
           trackingNumber: req.trackingNumber,
           name: req.name,
-          storeOrderId: req.idFromShop,
+          storeProductId: req.idFromShop,
           url: req.url,
           updatedAt: new Date(),
         })
