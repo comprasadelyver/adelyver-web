@@ -41,7 +41,7 @@ export default function FindClientForm() {
 
   return (
     <div className="w-full max-w-lg px-6 pb-6 grid grid-rows-[auto_1fr]">
-      <h1 className="mb-5">Clientes</h1>
+      <h1 className="mb-5 text-center text-xl">Clientes</h1>
       <form
         id="find-client-form"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -67,7 +67,7 @@ export default function FindClientForm() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel>Número de teléfono</FieldLabel>
-                <Input type="number" {...field} value={field.value ?? ""} />
+                <Input type="text" {...field} value={field.value ?? ""} />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}

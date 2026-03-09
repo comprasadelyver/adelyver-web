@@ -59,14 +59,14 @@ export default function ClientsAdminPanel() {
             <div className="grid gap-4 mt-2">
               <Button
                 variant="link"
-                onClick={() => router.push("/clients-admin-panel")}
+                onClick={() => router.push("/admin/clients")}
                 className=""
               >
                 Ver todos los clientes
               </Button>
               <Button
                 variant="default"
-                onClick={() => router.push("/find-client")}
+                onClick={() => router.push("/admin/clients/search")}
                 className="rounded-lg"
               >
                 Buscar clientes

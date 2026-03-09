@@ -16,6 +16,7 @@ import { Spinner } from "@/app/__components/ui/spinner";
 import { deleteProductByAdminAction } from "@/features/actions/OrdersController.actions";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import EditProductForm from "./EditProductForm";
 
 type ProductAdminEditProps = {
   orderId: string;

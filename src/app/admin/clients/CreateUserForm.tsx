@@ -19,6 +19,8 @@ import { toast } from "sonner";
 import UserForm from "./UserForm";
 import { Button } from "@/app/__components/ui/button";
 import { useState } from "react";
+import { Spinner } from "@/app/__components/ui/spinner";
+import { cn } from "@/app/__lib/utils";
 
 export default function CreateUserForm({
   children,
@@ -55,7 +57,9 @@ export default function CreateUserForm({
 
       toast.success("Cliente creado correctamente");
       await queryClient.invalidateQueries({ queryKey: ["clients"] });
+
       setIsDrawerOpen(false);
+      form.reset();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -79,8 +83,17 @@ export default function CreateUserForm({
           </form>
         </div>
         <DrawerFooter>
-          <Button type="submit" form="create-user-form" className="w-full">
-            Guardar Usuario
+          <Button
+            type="submit"
+            form="create-user-form"
+            className="w-full"
+            disabled={form.formState.isSubmitting || !form.formState.isDirty}
+          >
+            <Spinner
+              data-icon="inline-start"
+              className={cn(!form.formState.isSubmitting && "hidden")}
+            />
+            {form.formState.isSubmitting ? "Guardando..." : "Guardar Usuario"}
           </Button>
           <DrawerClose asChild>
             <Button variant="ghost">Atrás</Button>
