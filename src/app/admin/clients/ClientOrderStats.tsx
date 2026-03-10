@@ -91,11 +91,12 @@ export default function ClientOrderStats({
           )}
         />
         <div className="grid grid-cols-[1fr_auto] mt-4">
-          {form.formState.isDirty && !form.formState.errors.name && (
+          {form.formState.isDirty && (
             <Button
               type="submit"
               className="col-start-2"
               form="update-client-form"
+              disabled={form.formState.isSubmitting || !form.formState.isDirty}
             >
               <Spinner
                 data-icon="inline-start"
