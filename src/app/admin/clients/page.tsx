@@ -2,7 +2,6 @@ import { Button } from "@/app/__components/ui/button";
 import ClientsAdminPanel from "./ClientsAdminPanel";
 import Link from "next/link";
 import { Filter } from "lucide-react";
-import Navbar from "../Navbar";
 
 export default function ClientsAdminPanelPage() {
   return (

@@ -2,7 +2,6 @@ import { Button } from "@/app/__components/ui/button";
 import OrderAdminPanel from "./OrderAdminPanel";
 import { Filter } from "lucide-react";
 import Link from "next/link";
-import Navbar from "@/app/admin/Navbar";
 
 export default function OrderAdminPanelPage() {
   return (

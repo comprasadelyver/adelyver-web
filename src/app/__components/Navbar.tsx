@@ -1,53 +1,23 @@
 "use client";
-import { BookSearch, LogOutIcon, UserSearch } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import Logo from "@/app/__assets/PNG-06.png";
 import Image from "next/image";
-import { ToggleGroup, ToggleGroupItem } from "../__components/ui/toggle-group";
-import { usePathname, useRouter } from "next/navigation";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../__components/ui/popover";
-import { Button } from "../__components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Button } from "./ui/button";
 import { useLogout } from "@/mutations/useLogOut";
-import { Spinner } from "../__components/ui/spinner";
+import { Spinner } from "./ui/spinner";
+import { ReactNode } from "react";
 
-export default function Navbar() {
-  const pathname = usePathname();
-  const router = useRouter();
+export default function Navbar({ children }: { children: ReactNode }) {
   const logoutMutation = useLogout();
-
-  const activeValue = pathname.includes("/orders") ? "orders" : "clients";
-
-  const handleNavigation = (value: string) => {
-    if (!value) return;
-
-    if (value === "orders") {
-      router.push("/admin/orders");
-    } else {
-      router.push("/admin/clients");
-    }
-  };
 
   return (
     <div className="sticky gap-4 top-0 bg-background/85 backdrop-blur-sm z-10 flex p-5 items-center mb-5">
       <div className="relative overflow-hidden size-12">
         <Image src={Logo} alt="" className="absolute size-full scale-[6]" />
       </div>
-      <ToggleGroup
-        className="ml-auto"
-        type="single"
-        value={activeValue}
-        onValueChange={handleNavigation}
-      >
-        <ToggleGroupItem value="orders" aria-label="Ver pedidos">
-          <BookSearch className="size-6" />
-        </ToggleGroupItem>
-        <ToggleGroupItem value="clients" aria-label="Ver clientes">
-          <UserSearch className="size-6" />
-        </ToggleGroupItem>
-      </ToggleGroup>
+
+      {children}
 
       <Popover>
         <PopoverTrigger asChild>
@@ -58,7 +28,7 @@ export default function Navbar() {
             YM
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-fit h-fit mr-8">
+        <PopoverContent className="w-fit h-fit mr-4">
           <div className="grid gap-4 justify-center">
             <div className="grid gap-1 text-center">
               <div className="aspect-square justify-self-center rounded-full bg-primary p-2 grid w-fit h-fit min-w-[2.5rem] place-content-center text-white">
