@@ -40,7 +40,8 @@ export function CircularProgress({
     <div
       className={cn(
         "max-w-2xs rounded-full relative flex items-center justify-center",
-        progress == 100 && "bg-[#33588f]"
+        status === "delivered" && "bg-[#33588f]",
+        status === "cancelled" && "bg-destructive/40",
       )}
       style={{ width: size, height: size }}
     >
@@ -61,7 +62,7 @@ export function CircularProgress({
         <circle
           className={cn(
             `text-[#33588f] transition-all duration-500 ease-out`,
-            progress == 100 && "text-transparent"
+            progress == 100 && "text-transparent",
           )}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
@@ -78,7 +79,7 @@ export function CircularProgress({
       <div className="absolute flex flex-col items-center justify-center">
         <span
           aria-label="progress-emoji"
-          className={cn(status == "delivered" && "text-primary-foreground")}
+          className={cn(status === "delivered" && "text-primary-foreground")}
         >
           {orderStatusIconMap[status]}
         </span>
