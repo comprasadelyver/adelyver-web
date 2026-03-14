@@ -9,6 +9,8 @@ export default interface IClientsController {
 
   loginByEmail: (email: string, password: string) => Promise<Result<void>>;
 
+  getCurrentUser: () => Promise<Result<Omit<ClientDto, "createdAt"> | null>>;
+
   signup: (req: CreateClientRequest) => Promise<Result<void>>;
 
   logout: () => Promise<Result<void>>;

@@ -183,6 +183,45 @@ export const SupabaseClientsController: IClientsController = {
     }
   },
 
+  getCurrentUser: async () => {
+    try {
+      const supabase = await supabaseClient();
+
+      const { data, error } = await supabase.auth.getClaims();
+      if (error) {
+        return Result.err({
+          code: error.code + "",
+          message: error.message,
+          data: error,
+        });
+      }
+
+      const claims = data?.claims;
+
+      if (claims) {
+        return Result.ok({
+          fullName: (claims.user_metadata?.full_name as string) ?? "UNKNOWN",
+          phone: claims.phone!,
+          email: claims.email,
+        });
+      }
+
+      return Result.ok(null);
+    } catch (error) {
+      if (error instanceof Error) {
+        return Result.err({
+          code: error.name,
+          message: error.message,
+        });
+      }
+
+      return Result.err({
+        code: "UNKNOWN_ERROR",
+        message: "Ocurrió un error inesperado",
+      });
+    }
+  },
+
   signup: async (req: CreateClientRequest): Promise<Result<void>> => {
     try {
       const supabase = await supabaseClient();

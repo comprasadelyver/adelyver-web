@@ -19,6 +19,10 @@ export const loginByEmailAction = createAction(
   (ioc) => ioc.ClientsController.loginByEmail
 );
 
+export const getCurrentUserAction = createAction(
+  (ioc) => ioc.ClientsController.getCurrentUser
+);
+
 export const signupAction = createAction((ioc) => ioc.ClientsController.signup);
 
 export const logoutAction = createAction((ioc) => ioc.ClientsController.logout);
