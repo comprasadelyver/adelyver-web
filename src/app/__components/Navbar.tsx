@@ -7,9 +7,21 @@ import { Button } from "./ui/button";
 import { useLogout } from "@/mutations/useLogOut";
 import { Spinner } from "./ui/spinner";
 import { ReactNode } from "react";
+import useGetCurrentUserQuery from "@/queries/useGetCurrentUserQuery";
 
 export default function Navbar({ children }: { children: ReactNode }) {
   const logoutMutation = useLogout();
+  const userQuery = useGetCurrentUserQuery();
+
+  const getInitials = (name?: string) => {
+    if (!name) return "??";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <div className="sticky gap-4 top-0 bg-background/85 backdrop-blur-sm z-10 flex p-5 items-center mb-5">
@@ -25,20 +37,28 @@ export default function Navbar({ children }: { children: ReactNode }) {
             variant="outline"
             className="aspect-square rounded-full h-full bg-primary p-2 grid place-content-center text-white "
           >
-            YM
+            {userQuery.isLoading ? (
+              <Spinner className="size-4" />
+            ) : (
+              getInitials(userQuery.data?.fullName)
+            )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-fit h-fit mr-4">
           <div className="grid gap-4 justify-center">
             <div className="grid gap-1 text-center">
               <div className="aspect-square justify-self-center rounded-full bg-primary p-2 grid w-fit h-fit min-w-[2.5rem] place-content-center text-white">
-                YM
+                {getInitials(userQuery.data?.fullName)}
               </div>
-              <h4 className="leading-none mb-1 font-medium">Yslen Marturelo</h4>
+              <h4 className="leading-none mb-1 font-medium">
+                {userQuery.data?.fullName || "Usuario"}
+              </h4>
               <p className="text-xs text-muted-foreground">
-                yslemarturelo@gmail.com
+                {userQuery.data?.email || "Sin correo"}
               </p>
-              <p className="text-xs text-muted-foreground">+53 53143133</p>
+              <p className="text-xs text-muted-foreground">
+                {userQuery.data?.phone || "Sin teléfono"}
+              </p>
             </div>
             <Button
               variant={"ghost"}
