@@ -2,9 +2,11 @@ import { supabaseAdmin, supabaseClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
   const next = "/auth/confirmed-email";
+
+  const WEB_URL = process.env.WEB_URL!;
 
   if (code) {
     const supabase = await supabaseClient();
@@ -24,14 +26,14 @@ export async function GET(request: Request) {
         });
       }
 
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(`${WEB_URL}${next}`);
     }
 
     if (error.code === "otp_expired") {
-      return NextResponse.redirect(`${origin}/auth/otp-expired`);
+      return NextResponse.redirect(`${WEB_URL}/auth/otp-expired`);
     }
   }
 
   // If something went wrong, send them to an error page
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+  return NextResponse.redirect(`${WEB_URL}/auth/auth-code-error`);
 }
