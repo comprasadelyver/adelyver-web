@@ -2,8 +2,15 @@ import { MessageCircleQuestionMarkIcon } from "lucide-react";
 import AuthGuard from "../__components/AuthGuard";
 import ClientGuard from "../__components/ClientGuard";
 import Navbar from "../__components/Navbar";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../__components/ui/dialog";
-import { IoLogoWhatsapp, IoLogoInstagram, IoMail } from "react-icons/io5"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../__components/ui/dialog";
+import { IoLogoWhatsapp, IoLogoInstagram, IoMail } from "react-icons/io5";
 import Link from "next/link";
 import { Button } from "../__components/ui/button";
 
@@ -12,11 +19,14 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-
   const socials = [
     [IoLogoWhatsapp, "+5353535353", "tel:+5353535353"],
     [IoLogoInstagram, "@tubeibita", "https://instagram.com/dinastars_"],
-    [IoMail, "elewasita@gmail.com", "mailto:elewasita@gmail.com"]
+    [
+      IoMail,
+      "adelyslauradiazordaz@gmail.com",
+      "mailto:adelyslauradiazordaz@gmail.com",
+    ],
   ] as const;
 
   return (
@@ -32,16 +42,14 @@ export default async function Layout({
               <DialogDescription> Comunícate con nosotros. </DialogDescription>
             </DialogHeader>
             <div className="grid gap-2">
-              {socials.map(([Icon, label, link]) =>
+              {socials.map(([Icon, label, link]) => (
                 <Button className="w-fit" key={link} variant="ghost">
                   <Link href={link} className="flex gap-2 items-center">
                     <Icon className="size-6!" />
-                    <span className="pb-1">
-                      {label}
-                    </span>
+                    <span className="pb-1">{label}</span>
                   </Link>
                 </Button>
-              )}
+              ))}
             </div>
           </DialogContent>
         </Dialog>
