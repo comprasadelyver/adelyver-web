@@ -5,6 +5,7 @@ import IClientsController, {
 } from "../abstractions/IClientsController";
 import { supabaseAdmin, supabaseClient } from "../../lib/supabase/server";
 import { Result } from "../shared/Result";
+import { headers } from "next/headers";
 
 async function isAdmin(): Promise<boolean> {
   const supabase = await supabaseClient(); // Cookie-based client
@@ -36,6 +37,8 @@ export const SupabaseClientsController: IClientsController = {
       }
 
       const filteredUsers = data.users.filter((u) => {
+        if (u.app_metadata?.role === "admin") return false;
+        if (!req.phone && !req.name) return true;
         if (
           req.name &&
           u.user_metadata?.full_name
@@ -180,21 +183,30 @@ export const SupabaseClientsController: IClientsController = {
     }
   },
 
-  signup: async (req: CreateClientRequest): Promise<Result<void>> => {
+  getCurrentUser: async () => {
     try {
       const supabase = await supabaseClient();
 
-      const { error } = await supabase.auth.signUp({
-        email: req.email ?? undefined,
-        phone: req.phone ?? undefined,
-        password: req.password,
-      });
-
+      const { data, error } = await supabase.auth.getClaims();
       if (error) {
-        return Result.err({ code: error.code + "", message: error.message });
+        return Result.err({
+          code: error.code + "",
+          message: error.message,
+          data: error,
+        });
       }
 
-      return Result.ok(undefined);
+      const claims = data?.claims;
+
+      if (claims) {
+        return Result.ok({
+          fullName: (claims.user_metadata?.full_name as string) ?? "UNKNOWN",
+          phone: claims.phone!,
+          email: claims.email,
+        });
+      }
+
+      return Result.ok(null);
     } catch (error) {
       if (error instanceof Error) {
         return Result.err({
@@ -210,9 +222,73 @@ export const SupabaseClientsController: IClientsController = {
     }
   },
 
+  signup: async (req: CreateClientRequest): Promise<Result<void>> => {
+    try {
+      const supabase = await supabaseClient();
+
+      const headerList = await headers();
+      const host = headerList.get("host");
+      const protocol = headerList.get("x-forwarded-proto") ?? "http";
+
+      const origin = `${protocol}://${host}`;
+
+      const { error } = await supabase.auth.signUp({
+        email: req.email!,
+        password: req.password,
+        options: {
+          emailRedirectTo: `${origin}/auth/verification-callback`,
+          data: {
+            full_name: req.fullName,
+            phone_number: req.phone,
+          },
+        },
+      });
+
+      if (error) {
+        return Result.err({ code: error.code + "", message: error.message });
+      }
+
+      return Result.ok(undefined);
+    } catch (error) {
+      if (error instanceof Error) {
+        return Result.err({
+          code: error.name,
+          message: error.message + "LOL",
+        });
+      }
+
+      return Result.err({
+        code: "UNKNOWN_ERROR",
+        message: "Ocurrió un error inesperado",
+      });
+    }
+  },
+
   logout: async function (): Promise<Result<void>> {
     const supabase = await supabaseClient();
     await supabase.auth.signOut();
     return Result.ok(undefined);
+  },
+
+  isAdmin: async function (): Promise<Result<boolean>> {
+    const supabase = await supabaseClient();
+    const { data, error } = await supabase.auth.getClaims();
+
+    if (error) {
+      return Result.err({ code: error.code + "", message: error.message });
+    }
+
+    return Result.ok(data?.claims.app_metadata?.role === "admin");
+  },
+
+  isAuthenticated: async function (): Promise<Result<boolean>> {
+    const supabase = await supabaseClient();
+    const { data, error } = await supabase.auth.getClaims();
+
+    if (error) {
+      return Result.err({ code: error.code + "", message: error.message });
+    }
+
+    return Result.ok(data?.claims.role === "authenticated");
   },
 };

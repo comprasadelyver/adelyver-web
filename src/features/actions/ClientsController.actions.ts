@@ -1,23 +1,34 @@
 "use server";
 
-import { createAction } from "./createAction";
+import { withSessionRls } from "./decorators/rls.decorator";
+import createAction from "./createAction";
 
-export const findClientsAction = createAction(
-  "ClientsController",
-  "findClients"
+export const findClientsAction = createAction((ioc, tx) =>
+  withSessionRls(tx, ioc.ClientsController.findClients)
 );
 
 export const createClientAction = createAction(
-  "ClientsController",
-  "createClient"
+  (ioc) => ioc.ClientsController.createClient
 );
 
 export const loginByPhoneAction = createAction(
-  "ClientsController",
-  "loginByPhone"
+  (ioc) => ioc.ClientsController.loginByPhone
 );
 
 export const loginByEmailAction = createAction(
-  "ClientsController",
-  "loginByEmail"
+  (ioc) => ioc.ClientsController.loginByEmail
+);
+
+export const getCurrentUserAction = createAction(
+  (ioc) => ioc.ClientsController.getCurrentUser
+);
+
+export const signupAction = createAction((ioc) => ioc.ClientsController.signup);
+
+export const logoutAction = createAction((ioc) => ioc.ClientsController.logout);
+
+export const isAdmin = createAction((ioc) => ioc.ClientsController.isAdmin);
+
+export const isAuthenticated = createAction(
+  (ioc) => ioc.ClientsController.isAuthenticated
 );

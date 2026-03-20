@@ -1,0 +1,1 @@
+ALTER TABLE "orders" ALTER COLUMN "client_id" SET DEFAULT public.get_my_id();

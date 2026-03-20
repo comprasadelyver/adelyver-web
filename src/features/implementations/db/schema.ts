@@ -7,6 +7,8 @@ import {
   timestamp,
   pgPolicy,
   integer,
+  pgSchema,
+  pgView,
 } from "drizzle-orm/pg-core";
 
 export const orders = pgTable(
@@ -14,7 +16,9 @@ export const orders = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
 
-    clientId: uuid("client_id").notNull(),
+    clientId: uuid("client_id")
+      .notNull()
+      .default(sql`public.get_my_id()`),
 
     status: text("status")
       .$type<OrderStatus>()
@@ -57,6 +61,12 @@ export const orders = pgTable(
       to: "authenticated",
       withCheck: sql`public.get_my_id() = ${table.clientId}`,
     }),
+
+    pgPolicy("user_edit_own_orders", {
+      for: "update",
+      to: "authenticated",
+      using: sql`public.get_my_id() = ${table.clientId} AND ${table.status} = 'pending_review'`,
+    }),
   ]
 );
 
@@ -71,7 +81,7 @@ export const products = pgTable(
         onDelete: "cascade",
       }),
 
-    storeOrderId: text("store_order_id").notNull(),
+    storeProductId: text("store_order_id").notNull(),
 
     url: text("url").notNull(),
 
@@ -106,7 +116,16 @@ export const products = pgTable(
   ]
 );
 
-export const ordersRelations = relations(orders, ({ many }) => ({
+export const userSearch = pgView("user_search", {
+  id: uuid("id"),
+  email: text("email"),
+  phone: text("phone"),
+  fullName: text("full_name"),
+}).as(
+  sql`SELECT id, email, phone, raw_user_meta_data->>'full_name' as full_name FROM auth.users`
+);
+
+export const ordersRelations = relations(orders, ({ many, one }) => ({
   products: many(products),
 }));
 

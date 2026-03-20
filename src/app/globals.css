@@ -51,17 +51,17 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --primary: oklch(31.36% 0.147 262.99);
+  --primary-foreground: oklch(95.07% 0.023 65.46);
+  --secondary: oklch(95.07% 0.023 65.46);
+  --secondary-foreground: oklch(31.36% 0.147 262.99);
+  --muted: oklch(95.07% 0.023 65.46);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: oklch(95.07% 0.023 65.46);
+  --accent-foreground: oklch(46.03% 0.1 258.15);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --input: oklch(86.03% 0.04 258.15);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -70,10 +70,10 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(46.03% 0.1 258.15);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-accent: oklch(95.07% 0.023 65.46);
+  --sidebar-accent-foreground: oklch(46.03% 0.1 258.15);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --background: oklch(1 0 0);
@@ -120,5 +120,31 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .text-h1 {
+    @apply scroll-m-20 text-center text-4xl font-bold tracking-tight text-balance;
+  }
+
+  .text-h2 {
+    @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0;
+  }
+
+  .text-h3 {
+    @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+  }
+
+  .text-h4 {
+    @apply scroll-m-20 text-xl font-semibold tracking-tight;
+  }
+
+  .text-p {
+    @apply leading-7 [&:not(:first-child)]:mt-6;
+  }
+
+  .text-lead {
+    @apply text-muted-foreground text-xl;
   }
 }
