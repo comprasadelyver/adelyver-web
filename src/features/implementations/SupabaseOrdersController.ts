@@ -11,7 +11,7 @@ import IOrdersController, {
   ClientOrderDto,
 } from "../abstractions/IOrderController";
 import { Result } from "../shared/Result";
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import { orders, products, userSearch } from "./db/schema";
 import { db, TransactionType } from "./db";
 import { supabaseAdmin } from "@/lib/supabase/server";
