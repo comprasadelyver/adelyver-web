@@ -28,7 +28,7 @@ export default function UserForm({ form }: CreateUserFormProps) {
         )}
       />
       <Controller
-        name="gmail"
+        name="email"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
