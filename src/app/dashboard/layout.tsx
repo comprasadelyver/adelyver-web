@@ -35,7 +35,7 @@ export default async function Layout({
 
   return (
     <AuthGuard>
-      <div className="min-h-dvh flex flex-col">
+      <div className="min-h-dvh flex flex-col ">
         <Navbar>
           <Dialog>
             <DialogTrigger className="ml-auto">
@@ -62,7 +62,9 @@ export default async function Layout({
             </DialogContent>
           </Dialog>
         </Navbar>
-        <ClientGuard>{children}</ClientGuard>
+        <main className="md:max-w-xl md:mx-auto w-full grid grow">
+          <ClientGuard>{children}</ClientGuard>
+        </main>
       </div>
     </AuthGuard>
   );

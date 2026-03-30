@@ -24,7 +24,7 @@ export default function Navbar({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="sticky gap-4 top-0 bg-background/85 backdrop-blur-sm z-10 flex p-5 items-center mb-5">
+    <nav className="sticky gap-4 top-0 bg-background/85 backdrop-blur-sm z-10 flex p-5 items-center mb-5 w-full md:w-xl md:mx-auto">
       <div className="relative overflow-hidden size-12">
         <Image src={Logo} alt="" className="absolute size-full scale-[6]" />
       </div>
@@ -78,6 +78,6 @@ export default function Navbar({ children }: { children: ReactNode }) {
           </div>
         </PopoverContent>
       </Popover>
-    </div>
+    </nav>
   );
 }

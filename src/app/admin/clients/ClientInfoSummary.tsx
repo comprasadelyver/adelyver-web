@@ -25,16 +25,6 @@ export default function ClientInfoSummary({
   email,
   children,
 }: ClientInfoSummaryProps) {
-  const ordersQuery = useFindOrdersQuery({
-    ignoreCancelled: false,
-    ignoreDelievered: false,
-    clientNumber: phone,
-  });
-
-  if (ordersQuery.isError) {
-    return <p>Ha ocurrido un error de tipo: {ordersQuery.error.message}</p>;
-  }
-
   return (
     <>
       <Accordion type="single" collapsible className="max-w-lg">
@@ -59,13 +49,6 @@ export default function ClientInfoSummary({
                   })}
                 </p>
                 <p className="font-light text-sm">({email})</p>
-                {ordersQuery.isSuccess ? (
-                  <p className="font-light text-sm">
-                    {ordersQuery.data.length} pedidos en total
-                  </p>
-                ) : (
-                  <Spinner />
-                )}
               </div>
             </AccordionTrigger>
             <AccordionContent> {children}</AccordionContent>

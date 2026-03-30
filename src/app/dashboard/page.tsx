@@ -7,10 +7,10 @@ import { Drawer, DrawerTrigger } from "../__components/ui/drawer";
 export default function OrderStatusViewPage() {
   return (
     <div className="grid grow grid-rows-[auto_1fr] h-full px-6">
-      <header className="max-w-3xl mb-4 self-center">
+      <header className="mb-4 self-center">
         <h1 className="text-h3">Tus pedidos</h1>
       </header>
-      <main className="w-full max-w-2xl justify-self-center h-full grid grid-rows-[1fr_auto]">
+      <main className="w-full justify-self-center h-full grid grid-rows-[1fr_auto]">
         <Drawer>
           <OrderStatusView />
 

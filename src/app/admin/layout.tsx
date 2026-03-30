@@ -9,15 +9,17 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <AuthGuard>
-      <AdminGuard>
-        <div className="min-h-dvh flex flex-col">
-          <Navbar>
-            <AdminNavbarLinks />
-          </Navbar>
-          {children}
-        </div>
-      </AdminGuard>
-    </AuthGuard>
+    <main className="md:max-w-xl md:mx-auto w-full grid grow">
+      <AuthGuard>
+        <AdminGuard>
+          <div className="min-h-dvh flex flex-col">
+            <Navbar>
+              <AdminNavbarLinks />
+            </Navbar>
+            {children}
+          </div>
+        </AdminGuard>
+      </AuthGuard>
+    </main>
   );
 }
