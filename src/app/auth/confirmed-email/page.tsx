@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/app/__components/ui/card";
 import Lottie from "lottie-react";
-
 import confetti from "@/app/__assets/lottie/confetti.json";
 import Link from "next/link";
 import { Button } from "@/app/__components/ui/button";

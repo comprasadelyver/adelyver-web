@@ -5,8 +5,8 @@ import { Filter } from "lucide-react";
 
 export default function ClientsAdminPanelPage() {
   return (
-    <div className="min-h-dvh grid grid-rows-[auto_1fr]">
-      <header className="px-8 mb-4 max-w-3xl self-center">
+    <div className="grid grow grid-rows-[auto_1fr]">
+      <header className="px-8 mb-4 self-center">
         <h1 className="text-h3">Clientes</h1>
       </header>
       <main className="grid grid-rows-[1fr_auto] w-full px-8 max-w-3xl">

@@ -21,6 +21,7 @@ import { Button } from "@/app/__components/ui/button";
 import { useState } from "react";
 import { Spinner } from "@/app/__components/ui/spinner";
 import { cn } from "@/app/__lib/utils";
+import { CheckIcon, ChevronLeft } from "lucide-react";
 
 export default function CreateUserForm({
   children,
@@ -34,7 +35,7 @@ export default function CreateUserForm({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
       name: "",
-      gmail: "",
+      email: "",
       phone: "",
       password: "",
       confirmPassword: "",
@@ -45,7 +46,7 @@ export default function CreateUserForm({
     try {
       const res = await createClientAction({
         fullName: data.name,
-        email: data.gmail,
+        email: data.email,
         phone: data.phone,
         password: data.password,
       });
@@ -89,14 +90,19 @@ export default function CreateUserForm({
             className="w-full"
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
           >
-            <Spinner
-              data-icon="inline-start"
-              className={cn(!form.formState.isSubmitting && "hidden")}
-            />
+            {form.formState.isSubmitting ? (
+              <Spinner data-icon="inline-start" className="size-4" />
+            ) : (
+              <CheckIcon className="size-4 shrink-0" />
+            )}
+
             {form.formState.isSubmitting ? "Guardando..." : "Guardar Usuario"}
           </Button>
           <DrawerClose asChild>
-            <Button variant="ghost">Atrás</Button>
+            <Button variant="ghost" type="button">
+              <ChevronLeft />
+              Atrás
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

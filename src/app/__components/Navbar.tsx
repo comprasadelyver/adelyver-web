@@ -24,60 +24,62 @@ export default function Navbar({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="sticky gap-4 top-0 bg-background/85 backdrop-blur-sm z-10 flex p-5 items-center mb-5">
+    <nav className="sticky gap-4 top-0 bg-background/85 backdrop-blur-sm z-10 flex p-5 items-center mb-5 w-full md:w-xl md:mx-auto">
       <div className="relative overflow-hidden size-12">
         <Image src={Logo} alt="" className="absolute size-full scale-[6]" />
       </div>
 
       {children}
 
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className="aspect-square rounded-full h-full bg-primary p-2 grid place-content-center text-white "
-          >
-            {userQuery.isLoading ? (
-              <Spinner className="size-4" />
-            ) : (
-              getInitials(userQuery.data?.fullName)
-            )}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-fit h-fit mr-4">
-          <div className="grid gap-4 justify-center">
-            <div className="grid gap-1 text-center">
-              <div className="aspect-square justify-self-center rounded-full bg-primary p-2 grid w-fit h-fit min-w-[2.5rem] place-content-center text-white">
-                {getInitials(userQuery.data?.fullName)}
-              </div>
-              <h4 className="leading-none mb-1 font-medium">
-                {userQuery.data?.fullName || "Usuario"}
-              </h4>
-              <p className="text-xs text-muted-foreground">
-                {userQuery.data?.email || "Sin correo"}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {userQuery.data?.phone || "Sin teléfono"}
-              </p>
-            </div>
+      {!userQuery.isLoading && userQuery.data &&
+        <Popover>
+          <PopoverTrigger asChild>
             <Button
-              variant={"ghost"}
-              onClick={() => logoutMutation.mutate()}
-              disabled={logoutMutation.isPending}
-              className="-mx-3 justify-start gap-1 hover:opacity-70 transition-all duration-300 ease-in-out"
+              variant="outline"
+              className="aspect-square rounded-full min-w-10 h-fit bg-primary p-2 grid place-content-center text-white "
             >
-              {logoutMutation.isPending ? (
+              {userQuery.isLoading ? (
                 <Spinner className="size-4" />
               ) : (
-                <LogOutIcon className="size-4 shrink-0" />
+                getInitials(userQuery.data?.fullName)
               )}
-              <span className="font-semibold">
-                {logoutMutation.isPending ? "Saliendo..." : "Salir"}
-              </span>
             </Button>
-          </div>
-        </PopoverContent>
-      </Popover>
-    </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-fit h-fit mr-4">
+            <div className="grid gap-4 justify-center">
+              <div className="grid gap-1 text-center">
+                <div className="aspect-square justify-self-center rounded-full bg-primary p-2 grid w-fit h-fit min-w-10 place-content-center text-white">
+                  {getInitials(userQuery.data?.fullName)}
+                </div>
+                <h4 className="leading-none mb-1 font-medium">
+                  {userQuery.data?.fullName || "Usuario"}
+                </h4>
+                <p className="text-xs text-muted-foreground">
+                  {userQuery.data?.email || "Sin correo"}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {userQuery.data?.phone || "Sin teléfono"}
+                </p>
+              </div>
+              <Button
+                variant={"ghost"}
+                onClick={() => logoutMutation.mutate()}
+                disabled={logoutMutation.isPending}
+                className="-mx-3 justify-start gap-1 hover:opacity-70 transition-all duration-300 ease-in-out"
+              >
+                {logoutMutation.isPending ? (
+                  <Spinner className="size-4" />
+                ) : (
+                  <LogOutIcon className="size-4 shrink-0" />
+                )}
+                <span className="font-semibold">
+                  {logoutMutation.isPending ? "Saliendo..." : "Salir"}
+                </span>
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
+      }
+    </nav>
   );
 }

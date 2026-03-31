@@ -90,7 +90,7 @@ export default function CreateProductForm({ orderId }: CreateProductFormProps) {
             ) : (
               <Check />
             )}
-            Añadir
+            {form.formState.isSubmitting ? "Añadiendo..." : "Añadir"}
           </Button>
           <DrawerClose asChild>
             <Button variant="ghost">
