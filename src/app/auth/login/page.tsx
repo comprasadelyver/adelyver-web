@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-dvh place-items-center py-20 w-full">
+    <div className="min-h-dvh place-items-center py-20 w-full max-w-xl md:mx-auto">
       <header className="mb-16 text-center max-w-3xl px-8 w-full">
         <h1 className="text-h1 mb-4">Iniciar sesión</h1>
         <p className="text-lead"> Inserta tus datos para obtener acceso</p>
