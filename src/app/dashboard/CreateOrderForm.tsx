@@ -47,7 +47,7 @@ export default function CreateOrderForm() {
   };
 
   return (
-    <DrawerContent>
+    <DrawerContent className="md:mx-auto md:max-w-3xl">
       <DrawerHeader>
         <DrawerTitle>Crear nuevo pedido</DrawerTitle>
         <DrawerDescription>
@@ -64,11 +64,11 @@ export default function CreateOrderForm() {
           disabled={form.formState.isSubmitting}
         >
           {form.formState.isSubmitting ? (
-            <Spinner data-icon="inline-start" />
+            <Spinner data-icon="inline-start" className="size-4" />
           ) : (
             <Check />
           )}
-          Crear Pedido
+          {form.formState.isSubmitting ? "Creando..." : "Crear Pedido"}
         </Button>
       </DrawerFooter>
     </DrawerContent>

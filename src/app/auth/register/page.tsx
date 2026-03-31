@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function RegisterPage() {
   return (
-    <div className="grid justify-items-center py-8 px-8 w-full">
+    <div className="grid justify-items-center py-8 px-8 w-full max-w-xl md:mx-auto">
       <header className="mb-16 text-center max-w-3xl w-full">
         <h1 className="text-h1 mb-4">Regístrate</h1>
         <p className="text-lead">

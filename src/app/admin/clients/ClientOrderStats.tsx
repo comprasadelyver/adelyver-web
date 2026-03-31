@@ -40,22 +40,21 @@ export default function ClientOrderStats({
     },
   });
 
-  const onSubmit = async (data: updateClientNameData) => {
-    if (ordersQuery.isError) {
-      return (
-        <p className="text-destructive">Error: {ordersQuery.error.message}</p>
-      );
-    }
+  if (ordersQuery.isError) {
+    return (
+      <p className="text-destructive">Error: {ordersQuery.error.message}</p>
+    );
+  }
 
-    if (ordersQuery.isLoading || !ordersQuery.data) {
-      return (
-        <span className="flex gap-4 items-center">
-          <Spinner />
-          <span>Cargando estadísticas...</span>
-        </span>
-      );
-    }
-  };
+  if (ordersQuery.isLoading || !ordersQuery.data) {
+    return (
+      <span className="flex gap-4 items-center">
+        <Spinner />
+        <span>Cargando estadísticas...</span>
+      </span>
+    );
+  }
+
   const stats = getClientStats(ordersQuery.data ?? []);
   const allOrders = ordersQuery.data ?? [];
   const activeOrders = allOrders.filter((o) => o.status !== "cancelled");
@@ -74,42 +73,6 @@ export default function ClientOrderStats({
 
   return (
     <div className="">
-      <form id="update-client-form" onSubmit={form.handleSubmit(onSubmit)}>
-        <Controller
-          control={form.control}
-          name="name"
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>Nombre del cliente</FieldLabel>
-              <Input
-                {...field}
-                type="text"
-                id="update-client-form-name"
-                aria-invalid={fieldState.invalid}
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <div className="grid grid-cols-[1fr_auto] mt-4">
-          {form.formState.isDirty && (
-            <Button
-              type="submit"
-              className="col-start-2"
-              form="update-client-form"
-              disabled={form.formState.isSubmitting || !form.formState.isDirty}
-            >
-              <Spinner
-                data-icon="inline-start"
-                className={cn(!form.formState.isSubmitting && "hidden")}
-              />
-              <Check />
-              Guardar cambios
-            </Button>
-          )}
-        </div>
-      </form>
-
       <div className="flex flex-col pt-6">
         <h4 className="bg-">Pedidos:</h4>
         {(Object.keys(OrderStatusValues) as OrderStatus[]).map((key) => (
