@@ -4,8 +4,8 @@ import { cookies } from "next/headers";
 
 export function supabaseAdmin() {
   return createClient(
-    getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    getRequiredEnv("SUPABASE_SERVICE_ROLE_KEY")
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 }
 
@@ -13,8 +13,8 @@ export async function supabaseClient() {
   const cookieStore = await cookies(); // Next.js 15+ requires awaiting cookies
 
   return createServerClient(
-    getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    getRequiredEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         getAll() {
@@ -33,22 +33,4 @@ export async function supabaseClient() {
       },
     }
   );
-}
-
-function getRequiredEnv(key: string) {
-  const value = process.env[key];
-  if (!value) {
-    LogIfDebug(`Missing environment variable ${key}`);
-    throw new Error(
-      `Environment variable ${key} is missing. Run 'wrangler secret put ${key}'`
-    );
-  }
-  LogIfDebug(`Using environment variable ${key}=${value}`);
-  return value;
-}
-
-export function LogIfDebug(str: string) {
-  if (process.env.DEBUG === "true") {
-    console.log(str);
-  }
 }

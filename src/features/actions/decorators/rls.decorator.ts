@@ -1,16 +1,14 @@
 import { TransactionType } from "../../implementations/db";
 import { sql } from "drizzle-orm";
-import { LogIfDebug, supabaseClient } from "@/lib/supabase/server";
+import { supabaseClient } from "@/lib/supabase/server";
 
 export function withSessionRls<P extends unknown[], R>(
   tx: TransactionType,
   callback: (...args: P) => Promise<R>
 ) {
   return async (...args: P): Promise<R> => {
-    LogIfDebug("withSessionRls start");
     const supabase = await supabaseClient();
     const { data } = await supabase.auth.getClaims();
-    LogIfDebug(`withSessionRls claims: ${data}`);
 
     return withRls(
       tx,
@@ -29,13 +27,10 @@ export function withNetworkRls<P extends unknown[], R>(
   callback: (...args: P) => Promise<R>
 ) {
   return async (...args: P): Promise<R> => {
-    LogIfDebug("withNetworkRls start");
     const supabase = await supabaseClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
-
-    LogIfDebug(`withNetworkRls user: ${user}`);
 
     return withRls(
       tx,
@@ -59,7 +54,6 @@ export function withRls<P extends unknown[], R>(
   callback: (...args: P) => Promise<R>
 ) {
   return async (...args: P): Promise<R> => {
-    LogIfDebug("withRls start");
     const role = user?.role ?? "anon";
     const jwtClaims = JSON.stringify({
       sub: user?.id ?? null,
@@ -71,10 +65,6 @@ export function withRls<P extends unknown[], R>(
       sql`SELECT set_config('request.jwt.claims', ${jwtClaims}, true)`
     );
 
-    LogIfDebug(`withRls claims: ${jwtClaims}`);
-    const result = await callback(...args);
-
-    LogIfDebug("withRls end");
-    return result;
+    return callback(...args);
   };
 }
